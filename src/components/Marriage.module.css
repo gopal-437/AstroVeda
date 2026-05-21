@@ -1,0 +1,496 @@
+.container {
+  width: 100%;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.inputGroup input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text-bright);
+  font-family: var(--font-inter);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.inputGroup input:focus {
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 15px rgba(212, 163, 89, 0.15);
+}
+
+.fullWidth {
+  grid-column: span 2;
+}
+
+.selectStyle {
+  background: #110926;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text-bright);
+  font-family: var(--font-inter);
+  font-size: 0.95rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selectStyle:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(212, 163, 89, 0.15);
+}
+
+.selectStyle option {
+  background: #110926;
+  color: var(--text-bright);
+  padding: 8px;
+}
+
+.submitRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Results Section styling */
+.resultsArea {
+  width: 100%;
+}
+
+.loaderArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 20px;
+}
+
+.loaderArea p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-family: var(--font-inter);
+}
+
+.reportContent {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.backRow {
+  display: flex;
+}
+
+.backBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+  color: var(--gold);
+}
+
+.reportHeader h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-family: var(--font-inter);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Top Dashboard score area */
+.dashboardTop {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.gaugeContainer {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gaugeSvg {
+  width: 180px;
+  height: 180px;
+  transform: rotate(-90deg);
+}
+
+.gaugeTrack {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.03);
+  stroke-width: 12;
+}
+
+.gaugeProgress {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+.gaugeVal {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gaugeNum {
+  font-family: var(--font-playfair), serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-bright);
+}
+
+.gaugeLabel {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: -2px;
+}
+
+.generalCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.generalCard h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.teaserAge {
+  font-family: var(--font-playfair), serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.teaserHint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Glassmorphism Lock Card */
+.lockCard {
+  background: linear-gradient(180deg, rgba(24, 9, 39, 0.85) 0%, rgba(8, 2, 16, 0.95) 100%);
+  border: 1px solid var(--gold);
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.15);
+}
+
+.lockIcon {
+  font-size: 2.5rem;
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.lockCard h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.lockCard p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.pricingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+}
+
+.crossPrice {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.activePrice {
+  color: var(--text-bright);
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-playfair), serif;
+}
+
+/* Premium sections styling */
+.premiumReport {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.timelineGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.detailCard {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 1.6;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cardIcon {
+  font-size: 1.25rem;
+}
+
+.cardHeader h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detailCard p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.periodsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.periodsHeader {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  border-left: 3px solid var(--gold);
+  padding-left: 12px;
+}
+
+.badgesGrid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.periodBadge {
+  background: rgba(236, 72, 153, 0.08);
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  color: #f472b6;
+  border-radius: 30px;
+  padding: 8px 16px;
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.printContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .fullWidth {
+    grid-column: span 1;
+  }
+  .dashboardTop {
+    flex-direction: column;
+    text-align: center;
+  }
+  .timelineGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Print Overrides */
+@media print {
+  .container {
+    color: #111111 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  .backRow, .lockCard {
+    display: none !important;
+  }
+
+  .reportHeader h2 {
+    color: #1a0b2e !important;
+    font-size: 18pt !important;
+  }
+
+  .subtitle {
+    color: #4a5568 !important;
+  }
+
+  .dashboardTop {
+    background: #faf8ff !important;
+    border: 1px solid #e9d5ff !important;
+    padding: 16px !important;
+    gap: 20px !important;
+    page-break-inside: avoid;
+  }
+
+  .gaugeContainer {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .gaugeSvg {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .gaugeTrack {
+    stroke: #e2e8f0 !important;
+  }
+
+  .gaugeProgress {
+    stroke: #db2777 !important;
+  }
+
+  .gaugeNum {
+    color: #111111 !important;
+    font-size: 1.8rem !important;
+  }
+
+  .gaugeLabel {
+    color: #4a5568 !important;
+  }
+
+  .generalCard h4 {
+    color: #1a0b2e !important;
+  }
+
+  .teaserAge {
+    color: #db2777 !important;
+    font-size: 1.6rem !important;
+  }
+
+  .teaserHint {
+    color: #2d3748 !important;
+    font-size: 9pt !important;
+  }
+
+  .timelineGrid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    page-break-inside: avoid;
+  }
+
+  .detailCard {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 4px solid #db2777 !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  .cardHeader h4 {
+    color: #1a0b2e !important;
+  }
+
+  .detailCard p {
+    color: #2d3748 !important;
+    font-size: 9pt !important;
+  }
+
+  .periodsHeader {
+    color: #1a0b2e !important;
+    border-left: 3px solid #db2777 !important;
+  }
+
+  .periodBadge {
+    background: #fdf2f8 !important;
+    border: 1px solid #fbcfe8 !important;
+    color: #be185d !important;
+    font-size: 9pt !important;
+  }
+}

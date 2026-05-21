@@ -1,0 +1,594 @@
+.container {
+  width: 100%;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.inputGroup input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text-bright);
+  font-family: var(--font-inter);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.inputGroup input:focus {
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 15px rgba(212, 163, 89, 0.15);
+}
+
+.submitRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Results layout */
+.resultsArea {
+  width: 100%;
+}
+
+.loaderArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 20px;
+}
+
+.loaderArea p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-family: var(--font-inter);
+}
+
+.reportContent {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.backRow {
+  display: flex;
+}
+
+.backBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+  color: var(--gold);
+}
+
+.reportHeader h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-family: var(--font-inter);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Chart Styles */
+.chartWrapper {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.chartContainer {
+  position: relative;
+  width: 100%;
+}
+
+.chartSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: rgba(255, 255, 255, 0.04);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.gridLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-inter);
+  font-size: 0.7rem;
+  text-anchor: end;
+}
+
+.chartPath {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+.nodeCircle {
+  fill: #110926;
+  stroke: var(--gold);
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+.nodeActive {
+  fill: var(--gold);
+  r: 6;
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+.hoverRect {
+  cursor: pointer;
+}
+
+.axisLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  text-anchor: middle;
+}
+
+/* Absolute HTML Tooltip */
+.tooltip {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: rgba(24, 9, 39, 0.95);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-inter);
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.15s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -90%); }
+  to { opacity: 1; transform: translate(-50%, -100%); }
+}
+
+.tooltipDay {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.tooltipVal {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+/* Blur Overlay for Locked State */
+.chartBlurOverlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 23%; /* Keep the first ~7 days clean */
+  background: linear-gradient(90deg, rgba(17, 9, 38, 0) 0%, rgba(17, 9, 38, 0.85) 15%, rgba(17, 9, 38, 0.96) 50%);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Free Teaser Alert */
+.highlightAlert {
+  display: flex;
+  gap: 16px;
+  background: rgba(6, 182, 212, 0.06);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  border-radius: 16px;
+  padding: 16px 20px;
+  align-items: flex-start;
+}
+
+.alertIcon {
+  font-size: 1.3rem;
+  color: #06b6d4;
+  animation: pulseIcon 2s infinite;
+}
+
+@keyframes pulseIcon {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; filter: drop-shadow(0 0 5px #06b6d4); }
+}
+
+.alertText h5 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+.alertText p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Glass Lock Card */
+.lockCard {
+  background: linear-gradient(180deg, rgba(24, 9, 39, 0.85) 0%, rgba(8, 2, 16, 0.95) 100%);
+  border: 1px solid var(--gold);
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+}
+
+.lockIcon {
+  font-size: 2.5rem;
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.lockCard h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.lockCard p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.pricingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+}
+
+.crossPrice {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.activePrice {
+  color: var(--text-bright);
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-playfair), serif;
+}
+
+/* Premium Unlocked Areas */
+.premiumReport {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sectionHeader {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  border-left: 3px solid var(--gold);
+  padding-left: 12px;
+  margin-bottom: 18px;
+}
+
+/* Vedic Cycles */
+.cyclesSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.cyclesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cycleCard {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.cycleTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+}
+
+.cycleTitle h5 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.cycleCard p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* Roadmap Timeline */
+.roadmapSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.roadmapTimeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 20px;
+}
+
+.roadmapTimeline::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.roadmapItem {
+  display: flex;
+  gap: 24px;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.roadmapItem:last-child {
+  padding-bottom: 0;
+}
+
+.roadmapItem::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid #110926;
+  box-shadow: 0 0 8px var(--gold);
+  z-index: 2;
+}
+
+.roadmapPeriod {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.roadmapContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.5;
+}
+
+.roadmapContent h5 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.roadmapContent p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.printContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .cyclesGrid {
+    grid-template-columns: 1fr;
+  }
+  .roadmapItem {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Printing Stylesheet */
+@media print {
+  .container {
+    color: #111111 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  .backRow, .lockCard, .chartBlurOverlay {
+    display: none !important;
+  }
+
+  .reportHeader h2 {
+    color: #1a0b2e !important;
+    font-size: 18pt !important;
+  }
+
+  .subtitle {
+    color: #4a5568 !important;
+  }
+
+  .chartWrapper {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px !important;
+    page-break-inside: avoid;
+  }
+
+  .gridLine {
+    stroke: #e2e8f0 !important;
+  }
+
+  .gridLabel {
+    fill: #4a5568 !important;
+  }
+
+  .chartPath {
+    stroke: #0284c7 !important;
+    animation: none !important;
+  }
+
+  .nodeCircle {
+    stroke: #0284c7 !important;
+    fill: #ffffff !important;
+  }
+
+  .axisLabel {
+    fill: #4a5568 !important;
+  }
+
+  .highlightAlert {
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    page-break-inside: avoid;
+  }
+
+  .alertIcon {
+    color: #15803d !important;
+    animation: none !important;
+  }
+
+  .alertText h5 {
+    color: #1a0b2e !important;
+  }
+
+  .alertText p {
+    color: #2d3748 !important;
+  }
+
+  .sectionHeader {
+    color: #1a0b2e !important;
+    border-left: 3px solid #0284c7 !important;
+  }
+
+  .cyclesGrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    page-break-inside: avoid;
+  }
+
+  .cycleCard {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  .cycleTitle h5 {
+    color: #1a0b2e !important;
+  }
+
+  .cycleCard p {
+    color: #2d3748 !important;
+  }
+
+  .roadmapTimeline::before {
+    background: #e2e8f0 !important;
+  }
+
+  .roadmapItem::before {
+    background: #0284c7 !important;
+    border-color: #ffffff !important;
+  }
+
+  .roadmapPeriod {
+    color: #be185d !important;
+  }
+
+  .roadmapContent h5 {
+    color: #1a0b2e !important;
+  }
+
+  .roadmapContent p {
+    color: #2d3748 !important;
+  }
+}

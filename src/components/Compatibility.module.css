@@ -1,0 +1,659 @@
+.container {
+  width: 100%;
+}
+
+/* Double-column input layout */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 0.1fr 1fr;
+  gap: 20px;
+  align-items: flex-start;
+  position: relative;
+  background: rgba(14, 8, 30, 0.4);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+  padding: 32px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.columnTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputGroup label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.inputGroup input {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: var(--text-bright);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  font-family: var(--font-inter);
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(168, 85, 247, 0.03);
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.inputRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.versusDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.6rem;
+  color: var(--magenta);
+  text-shadow: 0 0 10px var(--magenta-glow);
+}
+
+.submitRow {
+  grid-column: 1 / span 3;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* Results Loading */
+.loaderArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
+/* Results Content Area */
+.resultsArea {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.backRow {
+  margin-bottom: 24px;
+}
+
+.backBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+  color: var(--gold);
+}
+
+.namesHeader {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.namesHeader h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.subSubtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Speedometer & Progress layout */
+.gaugeScoresSection {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 40px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 32px;
+  border-radius: 20px;
+  margin-bottom: 32px;
+}
+
+.gaugeContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.svgCircle {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+}
+
+.gaugeTrack {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.04);
+}
+
+.gaugeProgress {
+  fill: none;
+  stroke: var(--gold);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-out;
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+}
+
+.gaugeTextPct {
+  fill: var(--text-bright);
+  font-family: var(--font-playfair), serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.gaugeTextLabel {
+  fill: var(--text-muted);
+  font-family: var(--font-inter);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* Sub-scores list */
+.subScoresGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.barGroup {
+  width: 100%;
+}
+
+.barHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.barTrack {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.barFillGold {
+  height: 100%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold-glow);
+  border-radius: 99px;
+}
+
+.barFillMagenta {
+  height: 100%;
+  background: var(--magenta);
+  box-shadow: 0 0 8px var(--magenta-glow);
+  border-radius: 99px;
+}
+
+.barFillCyan {
+  height: 100%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow);
+  border-radius: 99px;
+}
+
+.barFillPurple {
+  height: 100%;
+  background: #a855f7;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  border-radius: 99px;
+}
+
+/* Teaser description block */
+.teaserBlock {
+  margin-bottom: 36px;
+  line-height: 1.6;
+}
+
+.sectionHeader {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.introParagraph {
+  font-size: 1rem;
+}
+
+/* Lock overlay design */
+.lockCard {
+  background: linear-gradient(180deg, rgba(21, 9, 49, 0.8) 0%, rgba(6, 2, 12, 0.95) 100%);
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);
+}
+
+.lockIcon {
+  font-size: 2.5rem;
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.lockCard h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.lockCard p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+.pricingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.crossPrice {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.activePrice {
+  color: var(--text-bright);
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-playfair), serif;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Premium unlocked contents */
+.premiumReport {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.premiumSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.detailCard {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.detailCard h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.strengthsFlagsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.listCard {
+  padding: 24px;
+  border-radius: 16px;
+  height: 100%;
+}
+
+.listCard h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.listCard ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.listCard li {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.strengthsCard {
+  background: rgba(16, 185, 129, 0.02);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.strengthsCard h4 {
+  color: #10b981;
+}
+
+.flagsCard {
+  background: rgba(239, 68, 68, 0.02);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.flagsCard h4 {
+  color: #ef4444;
+}
+
+.timelineSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.timelineList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timelineItem {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 16px 20px;
+  border-radius: 12px;
+}
+
+.timelineIndex {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  opacity: 0.7;
+}
+
+.timelineItem p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--foreground);
+}
+
+.printContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+@media (max-width: 992px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .versusDivider {
+    padding: 10px 0;
+    font-size: 1.2rem;
+  }
+  
+  .submitRow {
+    grid-column: 1;
+  }
+  
+  .gaugeScoresSection {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .strengthsFlagsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .container {
+    color: #111111 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  .namesHeader h2 {
+    color: #1a0b2e !important;
+    font-family: var(--font-playfair), serif;
+    font-size: 28pt !important;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  .subSubtitle {
+    color: #4a5568 !important;
+    font-size: 11pt !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Make gauge look gorgeous on white paper */
+  .gaugeScoresSection {
+    background: #faf8ff !important;
+    border: 2px solid #e9d5ff !important;
+    color: #111111 !important;
+    grid-template-columns: 1fr 1.2fr !important;
+    gap: 30px !important;
+    padding: 20px !important;
+    page-break-inside: avoid;
+  }
+
+  .gaugeTrack {
+    stroke: #e2e8f0 !important;
+  }
+
+  .gaugeProgress {
+    stroke: #8b5cf6 !important;
+    filter: none !important;
+  }
+
+  .gaugeTextPct {
+    fill: #1a0b2e !important;
+  }
+
+  .gaugeTextLabel {
+    fill: #718096 !important;
+  }
+
+  /* Sub scores */
+  .barTrack {
+    background: #e2e8f0 !important;
+  }
+
+  .barFillGold {
+    background: #d97706 !important;
+    box-shadow: none !important;
+  }
+
+  .barFillMagenta {
+    background: #db2777 !important;
+    box-shadow: none !important;
+  }
+
+  .barFillCyan {
+    background: #0891b2 !important;
+    box-shadow: none !important;
+  }
+
+  .barFillPurple {
+    background: #7c3aed !important;
+    box-shadow: none !important;
+  }
+
+  .barHeader {
+    color: #2d3748 !important;
+  }
+
+  .teaserBlock {
+    margin-top: 25px;
+    page-break-inside: avoid;
+  }
+
+  .sectionHeader {
+    color: #8b5cf6 !important;
+    border-bottom: 2px solid #e9d5ff !important;
+    padding-bottom: 5px !important;
+  }
+
+  .introParagraph {
+    color: #2d3748 !important;
+    font-size: 11pt !important;
+  }
+
+  /* Unlocked Premium Report sections */
+  .detailCard {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 4px solid #8b5cf6 !important;
+    padding: 15px !important;
+    margin-bottom: 15px !important;
+    page-break-inside: avoid;
+  }
+
+  .detailCard h4 {
+    color: #1a0b2e !important;
+    font-size: 12pt !important;
+    margin-bottom: 4px !important;
+  }
+
+  .detailCard p {
+    color: #2d3748 !important;
+    font-size: 10pt !important;
+  }
+
+  /* Strengths and warnings */
+  .strengthsFlagsGrid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+    page-break-inside: avoid;
+    margin-top: 20px;
+  }
+
+  .listCard {
+    border-radius: 8px !important;
+    padding: 15px !important;
+  }
+
+  .strengthsCard {
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+  }
+
+  .strengthsCard h4 {
+    color: #166534 !important;
+  }
+
+  .strengthsCard li {
+    color: #14532d !important;
+  }
+
+  .flagsCard {
+    background: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+  }
+
+  .flagsCard h4 {
+    color: #991b1b !important;
+  }
+
+  .flagsCard li {
+    color: #7f1d1d !important;
+  }
+
+  /* Timeline */
+  .timelineSection {
+    margin-top: 25px;
+    page-break-inside: avoid;
+  }
+
+  .timelineItem {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px 15px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .timelineIndex {
+    color: #8b5cf6 !important;
+  }
+
+  .timelineItem p {
+    color: #2d3748 !important;
+  }
+}

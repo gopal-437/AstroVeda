@@ -1,0 +1,287 @@
+/* Custom Cosmic Design System - Purple Theme (Astero.ID) */
+:root {
+  --font-serif: var(--font-playfair), serif;
+  --font-inter: 'Inter', sans-serif;
+
+  /* Colors */
+  --bg-color: #06020c;
+  --bg-gradient: radial-gradient(circle at 50% 50%, #150931 0%, #06020c 100%);
+  --foreground: #ece9fc;
+  
+  /* Primary Accent: Violet/Purple */
+  --gold: #a855f7;
+  --gold-glow: rgba(168, 85, 247, 0.3);
+  --gold-hover: #b55fe6;
+  
+  --magenta: #f472b6;
+  --magenta-glow: rgba(244, 114, 182, 0.35);
+  
+  --cyan: #00f5ff;
+  --cyan-glow: rgba(0, 245, 255, 0.35);
+
+  --card-bg: rgba(14, 8, 30, 0.7);
+  --card-border: rgba(168, 85, 247, 0.16);
+  --card-border-active: rgba(168, 85, 247, 0.4);
+  --card-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.7);
+  
+  --text-muted: #94a3b8;
+  --text-bright: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  background: var(--bg-color);
+  background-image: var(--bg-gradient);
+  color: var(--foreground);
+  font-family: var(--font-inter);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--text-bright);
+  letter-spacing: -0.01em;
+}
+
+/* Glassmorphism utility card */
+.cosmic-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 28px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cosmic-card:hover {
+  border-color: rgba(168, 85, 247, 0.35);
+  box-shadow: 0 15px 45px 0 rgba(168, 85, 247, 0.08);
+}
+
+/* Premium buttons styled as Purple Glowing Pills */
+.btn-gold {
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid var(--gold);
+  color: var(--text-bright);
+  font-family: var(--font-inter);
+  font-weight: 500;
+  border-radius: 99px;
+  padding: 12px 28px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px var(--gold-glow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-gold:hover {
+  background: var(--gold);
+  color: #06020c;
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+}
+
+.btn-gold:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-bright);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+  padding: 12px 28px;
+  font-family: var(--font-inter);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Glowing text & effects */
+.glow-gold {
+  color: #c084fc;
+  text-shadow: 0 0 12px var(--gold-glow);
+}
+
+.glow-magenta {
+  color: #f472b6;
+  text-shadow: 0 0 12px var(--magenta-glow);
+}
+
+.glow-cyan {
+  color: #22d3ee;
+  text-shadow: 0 0 12px var(--cyan-glow);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #06020c;
+}
+::-webkit-scrollbar-thumb {
+  background: #180d35;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* Scanner Animation */
+@keyframes scan {
+  0% { top: 0%; }
+  50% { top: 100%; }
+  100% { top: 0%; }
+}
+
+.scanner-line {
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  box-shadow: 0 0 12px var(--gold);
+  animation: scan 3s infinite linear;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Pulse animation */
+@keyframes pulse-purple {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(168, 85, 247, 0);
+  }
+}
+.pulse-button {
+  animation: pulse-purple 2s infinite;
+}
+
+/* Grid & Layout utilities */
+.cosmic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* Print CSS for PDF Report Generation */
+@media print {
+  html, body {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #111111 !important;
+    font-size: 11pt !important;
+  }
+  
+  header,
+  footer,
+  div[class*="starsBg"],
+  div[class*="nebulaBg"],
+  .no-print,
+  button {
+    display: none !important;
+  }
+
+  /* Hide all main features on print by default if a specific print class is active */
+  body[class*="printing-"] section {
+    display: none !important;
+  }
+
+  /* Show and unbox only the active print target */
+  body.printing-compatibility #compatibility {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.printing-numerology #numerology {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.printing-career #career {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.printing-palm #palm {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.printing-marriage #marriage {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.printing-timeline #timeline {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.printing-kundli #kundli {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #111111 !important;
+  }
+  
+  .text-gold, .glow-gold, .text-cyan, .text-magenta {
+    color: #111111 !important;
+    text-shadow: none !important;
+  }
+  
+  .print-page-break {
+    page-break-before: always;
+  }
+}

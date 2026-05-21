@@ -1,0 +1,793 @@
+.container {
+  width: 100%;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.inputGroup input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text-bright);
+  font-family: var(--font-inter);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.inputGroup input:focus {
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 15px rgba(212, 163, 89, 0.15);
+}
+
+.submitRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Results Section */
+.resultsArea {
+  width: 100%;
+}
+
+.loaderArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  gap: 20px;
+}
+
+.loaderArea p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-family: var(--font-inter);
+}
+
+.reportContent {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.backRow {
+  display: flex;
+}
+
+.backBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-inter);
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+  color: var(--gold);
+}
+
+.reportHeader h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-family: var(--font-inter);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* D1 Kundli and teaser layout */
+.chartDashboard {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.svgWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.kundliSvg {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  background: rgba(24, 9, 39, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.houseGroup {
+  cursor: pointer;
+  pointer-events: bounding-box;
+}
+
+.houseGroup:hover rect {
+  fill: rgba(212, 163, 89, 0.05);
+}
+
+.houseLabel {
+  fill: rgba(255, 255, 255, 0.25);
+  font-family: var(--font-inter);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.planetLabel {
+  fill: var(--text-bright);
+  font-family: var(--font-inter);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+.planetLabelActive {
+  fill: var(--gold);
+  font-size: 12px;
+  filter: drop-shadow(0 0 4px var(--gold));
+}
+
+.houseIndicator {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  min-height: 48px;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  width: 100%;
+}
+
+.indTitle {
+  font-family: var(--font-inter);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.indPlanets {
+  font-family: var(--font-inter);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.indHint {
+  font-family: var(--font-inter);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Teaser side values */
+.teaserSide {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+}
+
+.teaserItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metaLabel {
+  font-family: var(--font-inter);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metaValue {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.teaserDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teaserDesc h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.teaserDesc p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Lock Card layout */
+.lockCard {
+  background: linear-gradient(180deg, rgba(24, 9, 39, 0.85) 0%, rgba(8, 2, 16, 0.95) 100%);
+  border: 1px solid var(--gold);
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 0 30px rgba(212, 163, 89, 0.15);
+}
+
+.lockIcon {
+  font-size: 2.5rem;
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.lockCard h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.lockCard p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.pricingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+}
+
+.crossPrice {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.activePrice {
+  color: var(--text-bright);
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-playfair), serif;
+}
+
+/* Premium Dashboard areas */
+.premiumReport {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Dosha & Yoga Shields Grid */
+.visualBadgesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.badgeCard {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  line-height: 1.5;
+}
+
+.badgeVisual {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.badgeSvg {
+  width: 32px;
+  height: 32px;
+}
+
+.badgeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badgeInfo h5 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.badgeInfo p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+/* Badge colors & gradients */
+.shieldGreen {
+  border-left: 4px solid #10b981;
+}
+.shieldGreen .badgeVisual {
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+}
+
+.shieldRed {
+  border-left: 4px solid #ef4444;
+  box-shadow: inset 5px 0 15px rgba(239, 68, 68, 0.02);
+}
+.shieldRed .badgeVisual {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  animation: pulseFlame 2.5s infinite;
+}
+
+@keyframes pulseFlame {
+  0%, 100% { filter: drop-shadow(0 0 2px #ef4444); }
+  50% { filter: drop-shadow(0 0 8px #ef4444); }
+}
+
+.shieldPurple {
+  border-left: 4px solid #a855f7;
+}
+.shieldPurple .badgeVisual {
+  background: rgba(168, 85, 247, 0.08);
+  color: #a855f7;
+}
+
+.shieldGold {
+  border-left: 4px solid var(--gold);
+  box-shadow: inset 5px 0 15px rgba(212, 163, 89, 0.02);
+}
+.shieldGold .badgeVisual {
+  background: rgba(212, 163, 89, 0.08);
+  color: var(--gold);
+}
+
+.shieldMuted {
+  border-left: 4px solid rgba(255, 255, 255, 0.1);
+}
+.shieldMuted .badgeVisual {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+}
+
+/* Gemstones Deck Section */
+.gemstoneSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.remedyHeader {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  border-left: 3px solid var(--gold);
+  padding-left: 12px;
+  margin-bottom: 6px;
+}
+
+.sectionSubtitle {
+  font-family: var(--font-inter);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.gemsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.gemCard {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gemCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 10px 25px rgba(212, 163, 89, 0.05);
+}
+
+.gemCardActive {
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: 0 0 25px rgba(212, 163, 89, 0.1);
+  grid-column: span 3;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+}
+
+.gemVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.gemSvg {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.gemCard:hover .gemSvg {
+  transform: rotate(15deg) scale(1.05);
+}
+
+.gemBadge {
+  font-family: var(--font-inter);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.gemText {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gemText h5 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.gemText p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.gemDetailsPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 24px;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  animation: slidePanel 0.25s ease-out forwards;
+}
+
+@keyframes slidePanel {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.detailRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.5;
+}
+
+.detailRow strong {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detailRow span {
+  font-size: 0.9rem;
+  color: var(--text-bright);
+}
+
+/* Charity remedies */
+.charitySection {
+  display: flex;
+  flex-direction: column;
+}
+
+.charityGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.charityCard {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+
+.charityIcon {
+  font-size: 1.8rem;
+}
+
+.charityText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.charityText h5 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.charityText p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.printContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Responsiveness */
+@media (max-width: 900px) {
+  .chartDashboard {
+    grid-template-columns: 1fr;
+  }
+  .visualBadgesGrid {
+    grid-template-columns: 1fr;
+  }
+  .gemsGrid {
+    grid-template-columns: 1fr;
+  }
+  .gemCardActive {
+    grid-column: span 1;
+    flex-direction: column;
+    text-align: center;
+  }
+  .gemDetailsPanel {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-left: 0;
+    padding-top: 16px;
+    width: 100%;
+  }
+  .charityGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Printing styles */
+@media print {
+  .container {
+    color: #111111 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  .backRow, .lockCard, .gemBadge, .gemText p {
+    display: none !important;
+  }
+
+  .reportHeader h2 {
+    color: #1a0b2e !important;
+    font-size: 18pt !important;
+  }
+
+  .subtitle {
+    color: #4a5568 !important;
+  }
+
+  .chartDashboard {
+    grid-template-columns: 280px 1fr !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px !important;
+    gap: 20px !important;
+    page-break-inside: avoid;
+  }
+
+  .kundliSvg {
+    background: #ffffff !important;
+    border: 1.5px solid #d4a359 !important;
+  }
+
+  .houseLabel {
+    fill: #718096 !important;
+  }
+
+  .planetLabel {
+    fill: #111111 !important;
+  }
+
+  .planetLabelActive {
+    fill: #000000 !important;
+  }
+
+  .houseIndicator {
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  .teaserSide {
+    gap: 12px !important;
+  }
+
+  .metaValue {
+    color: #db2777 !important;
+    font-size: 1.25rem !important;
+  }
+
+  .teaserDesc h4 {
+    color: #1a0b2e !important;
+  }
+
+  .teaserDesc p {
+    color: #2d3748 !important;
+    font-size: 9pt !important;
+  }
+
+  .visualBadgesGrid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    page-break-inside: avoid;
+  }
+
+  .badgeCard {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  .shieldGreen { border-left: 4px solid #16a34a !important; }
+  .shieldRed { border-left: 4px solid #dc2626 !important; }
+  .shieldPurple { border-left: 4px solid #9333ea !important; }
+  .shieldGold { border-left: 4px solid #ca8a04 !important; }
+
+  .badgeVisual {
+    background: #f8fafc !important;
+    color: #4a5568 !important;
+  }
+
+  .badgeInfo h5 {
+    color: #1a0b2e !important;
+  }
+
+  .badgeInfo p {
+    color: #2d3748 !important;
+    font-size: 9pt !important;
+  }
+
+  .remedyHeader {
+    color: #1a0b2e !important;
+    border-left: 3px solid #ca8a04 !important;
+  }
+
+  .gemsGrid {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 12px !important;
+    page-break-inside: avoid;
+  }
+
+  .gemCard {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  .gemCardActive {
+    grid-column: span 1 !important;
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+
+  .gemText h5 {
+    color: #1a0b2e !important;
+  }
+
+  .gemDetailsPanel {
+    display: none !important;
+  }
+
+  .charityGrid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    page-break-inside: avoid;
+  }
+
+  .charityCard {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  .charityText h5 {
+    color: #1a0b2e !important;
+  }
+
+  .charityText p {
+    color: #2d3748 !important;
+    font-size: 9pt !important;
+  }
+}

@@ -1,0 +1,122 @@
+.wheelWrapper {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.wheelSvg {
+  width: 100%;
+  height: auto;
+  animation: spin 160s linear infinite;
+  filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.25));
+}
+
+/* 1. Dotted Outer Ring */
+.dottedOuter {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 1.25;
+  stroke-dasharray: 2 6; /* produces small circular dots */
+}
+
+/* 2. Solid Double Outer Ring */
+.outerRim {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 1.25;
+}
+
+.outerRimSecondary {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 0.75;
+}
+
+/* 3. Inner Zodiac Boundary */
+.innerRim {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 1.25;
+}
+
+/* 4. Division Spokes */
+.spoke {
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 0.75;
+}
+
+/* 5. Concentric Guidelines and Centers */
+.guideline {
+  fill: none;
+  stroke: rgba(168, 85, 247, 0.18);
+  stroke-width: 0.75;
+}
+
+.centerRim {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 0.75;
+}
+
+/* 6. Sacred Geometry Lines (Metatron's Cube) */
+.sacredLine {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 0.75;
+}
+
+/* 7. Symmetrical node circles */
+.nodeCircle {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 0.75;
+}
+
+.centerDot {
+  fill: #ffffff;
+  opacity: 0.95;
+}
+
+/* 8. Esoteric Annotations */
+.annotationText {
+  fill: rgba(255, 255, 255, 0.25);
+  font-size: 4px;
+  font-weight: 600;
+  font-family: var(--font-inter);
+  letter-spacing: 0.18em;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 9. Zodiac Character Symbols */
+.zodiacChar {
+  fill: #ffffff;
+  stroke: #ffffff;
+  stroke-width: 1.8px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  font-size: 32px;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.zodiacChar:hover {
+  fill: var(--gold);
+  stroke: var(--gold);
+  filter: drop-shadow(0 0 10px var(--gold));
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
