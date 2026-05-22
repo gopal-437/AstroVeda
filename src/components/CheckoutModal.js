@@ -22,9 +22,13 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
     });
   };
 
+  React.useEffect(() => {
+    loadRazorpayScript();
+  }, []);
+
+
   const handlePayment = async () => {
     setLoading(true);
-    setPaymentStatus("processing");
 
     try {
       // 1. Create order on the backend
@@ -41,6 +45,7 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
 
       // 2. Handle Fallback/Demo mode
       if (orderData.isDemo) {
+        setPaymentStatus("processing");
         setTimeout(async () => {
           // Simulate backend verification for demo payment
           try {
@@ -220,8 +225,12 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
                 <span className={styles.upiBadge}>Cards / UPI QR</span>
               </div>
 
-              <button className={`btn-gold pulse-button ${styles.payBtn}`} onClick={handlePayment}>
-                Pay ₹{price} & Unlock Report ✦
+              <button 
+                className={`btn-gold pulse-button ${styles.payBtn}`} 
+                onClick={handlePayment}
+                disabled={loading}
+              >
+                {loading ? "Preparing Secure Payment..." : `Pay ₹${price} & Unlock Report ✦`}
               </button>
               
               <p className={styles.disclaimer}>
