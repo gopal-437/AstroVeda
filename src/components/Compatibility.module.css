@@ -479,6 +479,13 @@
   }
 }
 
+@media (max-width: 480px) {
+  .inputRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 @media print {
   .container {
     color: #111111 !important;

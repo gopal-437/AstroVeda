@@ -5,6 +5,7 @@ import styles from "./Header.module.css";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +17,7 @@ export default function Header() {
 
   const handleNavClick = (e, id) => {
     e.preventDefault();
+    setMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
       const headerOffset = 80;
@@ -32,12 +34,15 @@ export default function Header() {
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""} no-print`}>
       <div className={styles.container}>
-        <div className={styles.logo} onClick={(e) => window.scrollTo({ top: 0, behavior: "smooth" })}>
+        <div className={styles.logo} onClick={(e) => {
+          setMobileMenuOpen(false);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}>
           <span className={styles.star}>✦</span>
           <span className={styles.logoText}>Astro<span className={styles.goldText}>Veda</span></span>
         </div>
         
-        <nav className={styles.nav}>
+        <nav className={`${styles.nav} ${mobileMenuOpen ? styles.navActive : ""}`}>
           <a href="#palm" onClick={(e) => handleNavClick(e, "palm")} className={styles.navLink}>Palm Scan</a>
           <a href="#love" onClick={(e) => handleNavClick(e, "love")} className={styles.navLink}>Love Match</a>
           <a href="#marriage" onClick={(e) => handleNavClick(e, "marriage")} className={styles.navLink}>Marriage</a>
@@ -46,12 +51,21 @@ export default function Header() {
           <a href="#horoscope" onClick={(e) => handleNavClick(e, "horoscope")} className={styles.navLink}>Horoscope</a>
         </nav>
 
-        <div>
+        <div className={styles.headerCta}>
           <button className="btn-gold pulse-button" onClick={(e) => handleNavClick(e, "palm")}>
             Scan Hand ✦
           </button>
         </div>
+
+        <button 
+          className={styles.menuToggle} 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className={`${styles.hamburger} ${mobileMenuOpen ? styles.hamburgerActive : ""}`}></span>
+        </button>
       </div>
     </header>
   );
 }
+

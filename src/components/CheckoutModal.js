@@ -220,7 +220,7 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
                 <span className={styles.upiBadge}>Cards / UPI QR</span>
               </div>
 
-              <button className="btn-gold pulse-button styles.payBtn" onClick={handlePayment}>
+              <button className={`btn-gold pulse-button ${styles.payBtn}`} onClick={handlePayment}>
                 Pay ₹{price} & Unlock Report ✦
               </button>
               
