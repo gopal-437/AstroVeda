@@ -2,10 +2,12 @@
 
 import React, { useState } from "react";
 import styles from "./CheckoutModal.module.css";
+import { useTranslation } from "@/lib/LanguageContext";
 
 export default function CheckoutModal({ featureId, featureTitle, price, birthHash, onSuccess, onClose }) {
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(""); // "", "processing", "success", "error"
+  const { t } = useTranslation();
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -162,25 +164,25 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
         {paymentStatus === "processing" && (
           <div className={styles.statusScreen}>
             <div className={styles.spinner}></div>
-            <h3 className={styles.statusTitle}>Verifying Payment</h3>
-            <p className={styles.statusDesc}>Securing transaction with payment gateway, please do not close this window...</p>
+            <h3 className={styles.statusTitle}>{t("modal_securing")}</h3>
+            <p className={styles.statusDesc}>{t("modal_securing_desc")}</p>
           </div>
         )}
 
         {paymentStatus === "success" && (
           <div className={styles.statusScreen}>
             <div className={styles.successIcon}>✓</div>
-            <h3 className={`${styles.statusTitle} glow-gold`}>Payment Successful!</h3>
-            <p className={styles.statusDesc}>Your premium report has been unlocked. Reading celestial charts...</p>
+            <h3 className={`${styles.statusTitle} glow-gold`}>{t("modal_success")}</h3>
+            <p className={styles.statusDesc}>{t("modal_success_desc")}</p>
           </div>
         )}
 
         {paymentStatus === "error" && (
           <div className={styles.statusScreen}>
             <div className={styles.errorIcon}>✕</div>
-            <h3 className={styles.statusTitle}>Transaction Failed</h3>
-            <p className={styles.statusDesc}>Something went wrong. Please check details or try again.</p>
-            <button className="btn-gold" onClick={() => setPaymentStatus("")}>Try Again</button>
+            <h3 className={styles.statusTitle}>{t("modal_failed")}</h3>
+            <p className={styles.statusDesc}>{t("modal_failed_desc")}</p>
+            <button className="btn-gold" onClick={() => setPaymentStatus("")}>{t("modal_try_again")}</button>
           </div>
         )}
 
@@ -188,32 +190,32 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
           <>
             <div className={styles.header}>
               <span className={styles.sparkle}>✦</span>
-              <h2 className={styles.title}>Unlock Premium Report</h2>
+              <h2 className={styles.title}>{t("modal_unlock_title")}</h2>
               <p className={styles.subtitle}>{featureTitle}</p>
             </div>
 
             <div className={styles.benefits}>
               <div className={styles.benefitItem}>
                 <span className={styles.check}>✦</span>
-                <span>Complete in-depth predictions and timelines</span>
+                <span>{t("modal_benefit_1")}</span>
               </div>
               <div className={styles.benefitItem}>
                 <span className={styles.check}>✦</span>
-                <span>Personalized astrology remedies & gemstone guidance</span>
+                <span>{t("modal_benefit_2")}</span>
               </div>
               <div className={styles.benefitItem}>
                 <span className={styles.check}>✦</span>
-                <span>Printable PDF report format (ready to download)</span>
+                <span>{t("modal_benefit_3")}</span>
               </div>
               <div className={styles.benefitItem}>
                 <span className={styles.check}>✦</span>
-                <span>Lifetime 30-day access locked to your birth details</span>
+                <span>{t("modal_benefit_4")}</span>
               </div>
             </div>
 
             <div className={styles.paymentSection}>
               <div className={styles.priceContainer}>
-                <span className={styles.priceLabel}>TOTAL AMOUNT</span>
+                <span className={styles.priceLabel}>{t("modal_total_amount")}</span>
                 <span className={styles.priceValue}>₹{price}</span>
               </div>
 
@@ -222,7 +224,7 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
                 <span className={styles.upiBadge}>Google Pay</span>
                 <span className={styles.upiBadge}>PhonePe</span>
                 <span className={styles.upiBadge}>Paytm</span>
-                <span className={styles.upiBadge}>Cards / UPI QR</span>
+                <span className={styles.upiBadge}>{t("modal_cards_upi")}</span>
               </div>
 
               <button 
@@ -230,11 +232,11 @@ export default function CheckoutModal({ featureId, featureTitle, price, birthHas
                 onClick={handlePayment}
                 disabled={loading}
               >
-                {loading ? "Preparing Secure Payment..." : `Pay ₹${price} & Unlock Report ✦`}
+                {loading ? t("modal_preparing") : t("modal_pay_unlock").replace("{price}", `₹${price}`)}
               </button>
               
               <p className={styles.disclaimer}>
-                Secure 256-bit SSL encrypted connection. Returns verified by signature.
+                {t("modal_disclaimer")}
               </p>
             </div>
           </>

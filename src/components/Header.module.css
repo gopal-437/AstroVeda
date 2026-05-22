@@ -155,14 +155,69 @@
   top: 0;
 }
 
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.langSelector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+
+.langBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-inter);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.langBtn:hover {
+  color: var(--text-bright);
+}
+
+.langActive {
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+
+.langDivider {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.8rem;
+  user-select: none;
+}
+
 @media (max-width: 768px) {
   .menuToggle {
     display: flex;
   }
   
-  .headerCta {
+  .rightSection {
     margin-left: auto;
     margin-right: 12px;
+    gap: 10px;
+  }
+
+  .langSelector {
+    padding: 3px 8px;
+    gap: 4px;
+  }
+
+  .langBtn {
+    font-size: 0.75rem;
+    padding: 2px 4px;
   }
   
   .headerCta button {

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Timeline.module.css";
 import CheckoutModal from "./CheckoutModal";
 import { getBirthHash } from "@/lib/astrology-engine/helpers";
+import { useTranslation } from "@/lib/LanguageContext";
 
 export default function Timeline() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ export default function Timeline() {
   const [token, setToken] = useState("");
   const [showCheckout, setShowCheckout] = useState(false);
   const [hoveredPoint, setHoveredPoint] = useState(null); // { day, score, x, y }
+  const { t, language } = useTranslation();
 
   // Load token from localStorage if exists
   useEffect(() => {
@@ -45,7 +47,8 @@ export default function Timeline() {
         body: JSON.stringify({
           featureId: "timeline",
           birthDetails: formData,
-          token: currentToken || token
+          token: currentToken || token,
+          lang: language
         })
       });
       const data = await res.json();
@@ -60,7 +63,7 @@ export default function Timeline() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.dob) {
-      alert("Please enter Name and Date of Birth.");
+      alert(language === "hi" ? "कृपया नाम और जन्म तिथि दर्ज करें।" : "Please enter Name and Date of Birth.");
       return;
     }
     setSubmitted(true);
@@ -152,18 +155,18 @@ export default function Timeline() {
         <form onSubmit={handleSubmit} className={styles.formContainer}>
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
-              <label>Full Name</label>
+              <label>{t("form_full_name")}</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter your full name"
+                placeholder={t("form_placeholder_name")}
                 required
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Date of Birth</label>
+              <label>{t("form_dob")}</label>
               <input
                 type="date"
                 name="dob"
@@ -175,7 +178,7 @@ export default function Timeline() {
           </div>
           <div className={styles.submitRow}>
             <button type="submit" className="btn-gold pulse-button">
-              Plot Future Timeline 📈
+              {t("btn_plot_timeline")}
             </button>
           </div>
         </form>
@@ -184,19 +187,19 @@ export default function Timeline() {
           {loading || !report ? (
             <div className={styles.loaderArea}>
               <div className="spinner"></div>
-              <p>Mapping solar cycles and dasha timelines...</p>
+              <p>{t("loader_timeline")}</p>
             </div>
           ) : (
             <div className={styles.reportContent}>
               <div className={`${styles.backRow} no-print`}>
                 <button onClick={resetForm} className={styles.backBtn}>
-                  ← Back to Calculator
+                  {t("form_reset")}
                 </button>
               </div>
 
               <div className={styles.reportHeader}>
-                <h2>30-Day Cosmic Energy Timeline</h2>
-                <p className={styles.subtitle}>Calculated for: {formData.name}</p>
+                <h2>{language === "hi" ? "30-दिवसीय ब्रह्मांडीय ऊर्जा समयरेखा" : "30-Day Cosmic Energy Timeline"}</h2>
+                <p className={styles.subtitle}>{t("career_report_calculated_for").replace("{name}", formData.name)}</p>
               </div>
 
               {/* Chart Visualization */}
@@ -314,8 +317,12 @@ export default function Timeline() {
                         top: `${(hoveredPoint.y / chartHeight) * 100 - 15}%`
                       }}
                     >
-                      <span className={styles.tooltipDay}>Day {hoveredPoint.day}</span>
-                      <span className={styles.tooltipVal}>Score: {hoveredPoint.score}%</span>
+                      <span className={styles.tooltipDay}>
+                        {language === "hi" ? `दिन ${hoveredPoint.day}` : `Day ${hoveredPoint.day}`}
+                      </span>
+                      <span className={styles.tooltipVal}>
+                        {language === "hi" ? `स्कोर: ${hoveredPoint.score}%` : `Score: ${hoveredPoint.score}%`}
+                      </span>
                     </div>
                   )}
 
@@ -333,7 +340,7 @@ export default function Timeline() {
                 <div className={styles.highlightAlert}>
                   <span className={styles.alertIcon}>✦</span>
                   <div className={styles.alertText}>
-                    <h5>Cosmic Transit Highlight</h5>
+                    <h5>{language === "hi" ? "ब्रह्मांडीय गोचर मुख्य अंश" : "Cosmic Transit Highlight"}</h5>
                     <p>{report.highlightedEvent}</p>
                   </div>
                 </div>
@@ -343,10 +350,8 @@ export default function Timeline() {
               {!report.unlocked ? (
                 <div className={`${styles.lockCard} no-print`}>
                   <span className={styles.lockIcon}>🔒</span>
-                  <h3>Unlock Your Full 30-Day Cosmic Timeline</h3>
-                  <p>
-                    Reveal full daily energy plots, identify exact dates for High Energy Fortune Peaks, map physical rest windows, and review your Vedic cycles monthly summary.
-                  </p>
+                  <h3>{t("lock_title_timeline")}</h3>
+                  <p>{t("lock_desc_timeline")}</p>
                   <div className={styles.pricingRow}>
                     <span className={styles.crossPrice}>₹299</span>
                     <span className={styles.activePrice}>₹29</span>
@@ -355,7 +360,7 @@ export default function Timeline() {
                     onClick={() => setShowCheckout(true)}
                     className="btn-gold pulse-button"
                   >
-                    Unlock 30-Day Timeline ✦
+                    {t("lock_btn_timeline")}
                   </button>
                 </div>
               ) : (
@@ -365,26 +370,26 @@ export default function Timeline() {
                   {/* Vedic Cycles Grid */}
                   {report.cycles && (
                     <div className={styles.cyclesSection}>
-                      <h4 className={styles.sectionHeader}>Planetary Cycles Forecast</h4>
+                      <h4 className={styles.sectionHeader}>{language === "hi" ? "ग्रहीय चक्र पूर्वानुमान" : "Planetary Cycles Forecast"}</h4>
                       <div className={styles.cyclesGrid}>
                         <div className={styles.cycleCard}>
                           <div className={styles.cycleTitle}>
                             <span>💼</span>
-                            <h5>Career & Ambition</h5>
+                            <h5>{language === "hi" ? "करियर और महत्वाकांक्षा" : "Career & Ambition"}</h5>
                           </div>
                           <p>{report.cycles.careerGrowth}</p>
                         </div>
                         <div className={styles.cycleCard}>
                           <div className={styles.cycleTitle}>
                             <span>💝</span>
-                            <h5>Relationship Harmony</h5>
+                            <h5>{language === "hi" ? "रिश्ते में सामंजस्य" : "Relationship Harmony"}</h5>
                           </div>
                           <p>{report.cycles.relationshipPhases}</p>
                         </div>
                         <div className={styles.cycleCard}>
                           <div className={styles.cycleTitle}>
                             <span>💰</span>
-                            <h5>Wealth Accumulation</h5>
+                            <h5>{language === "hi" ? "धन संचय" : "Wealth Accumulation"}</h5>
                           </div>
                           <p>{report.cycles.financialOpportunities}</p>
                         </div>
@@ -395,7 +400,7 @@ export default function Timeline() {
                   {/* Roadmap Timeline */}
                   {report.futureRoadmap && (
                     <div className={styles.roadmapSection}>
-                      <h4 className={styles.sectionHeader}>12-Month Chronological Roadmap</h4>
+                      <h4 className={styles.sectionHeader}>{language === "hi" ? "12-महीने का कालानुक्रमिक रोडमैप" : "12-Month Chronological Roadmap"}</h4>
                       <div className={styles.roadmapTimeline}>
                         {report.futureRoadmap.map((item, idx) => (
                           <div key={idx} className={styles.roadmapItem}>
@@ -413,7 +418,7 @@ export default function Timeline() {
                   {/* Print Button */}
                   <div className={`${styles.printContainer} no-print`}>
                     <button onClick={handlePrint} className="btn-gold">
-                      Print / Save as PDF 📄
+                      {t("btn_print_report")}
                     </button>
                   </div>
                 </div>
@@ -427,7 +432,7 @@ export default function Timeline() {
       {showCheckout && (
         <CheckoutModal
           featureId="timeline"
-          featureTitle="30-Day Future Timeline Forecast"
+          featureTitle={t("sec_timeline")}
           price={29}
           birthHash={getBirthHash(formData)}
           onClose={() => setShowCheckout(false)}

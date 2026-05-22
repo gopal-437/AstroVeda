@@ -8,22 +8,24 @@ import {
   getPlanetaryPositions,
   getCompatibilityScores
 } from "./calculators";
-
-import {
-  HOROSCOPE_TEMPLATES,
-  COMPATIBILITY_TEMPLATES,
-  NUMEROLOGY_TEMPLATES,
-  CAREER_TEMPLATES,
-  MARRIAGE_TEMPLATES,
-  KUNDLI_TEMPLATES,
-  PALM_TEMPLATES
-} from "./templates";
+import * as templatesEn from "./templates";
+import * as templatesHi from "./templates_hi";
 
 /**
  * Main Astrology Engine entry point.
  * Generates reports based on featureId, birth details, and premium state.
  */
-export function generateAstrologyReport(featureId, birthDetails, isPremium = false) {
+export function generateAstrologyReport(featureId, birthDetails, isPremium = false, lang = "en") {
+  const templates = lang === "hi" ? templatesHi : templatesEn;
+  const {
+    HOROSCOPE_TEMPLATES,
+    COMPATIBILITY_TEMPLATES,
+    NUMEROLOGY_TEMPLATES,
+    CAREER_TEMPLATES,
+    MARRIAGE_TEMPLATES,
+    KUNDLI_TEMPLATES,
+    PALM_TEMPLATES
+  } = templates;
   // Common details parsing
   const name = birthDetails.name || "Seeker";
   const dob = birthDetails.dob || "";

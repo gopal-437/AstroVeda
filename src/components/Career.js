@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Career.module.css";
 import CheckoutModal from "./CheckoutModal";
 import { getBirthHash } from "@/lib/astrology-engine/helpers";
+import { useTranslation } from "@/lib/LanguageContext";
 
 export default function Career() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ export default function Career() {
   const [report, setReport] = useState(null);
   const [token, setToken] = useState("");
   const [showCheckout, setShowCheckout] = useState(false);
+  const { t, language } = useTranslation();
 
   // Load token from localStorage if exists
   useEffect(() => {
@@ -46,7 +48,8 @@ export default function Career() {
         body: JSON.stringify({
           featureId: "career",
           birthDetails: formData,
-          token: currentToken || token
+          token: currentToken || token,
+          lang: language
         })
       });
       const data = await res.json();
@@ -61,7 +64,7 @@ export default function Career() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.dob) {
-      alert("Please enter Name and Date of Birth.");
+      alert(language === "hi" ? "कृपया नाम और जन्म तिथि दर्ज करें।" : "Please enter Name and Date of Birth.");
       return;
     }
     setSubmitted(true);
@@ -118,18 +121,18 @@ export default function Career() {
         <form onSubmit={handleSubmit} className={styles.formContainer}>
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
-              <label>Full Name</label>
+              <label>{t("form_full_name")}</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter your full name"
+                placeholder={t("form_placeholder_name")}
                 required
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Date of Birth</label>
+              <label>{t("form_dob")}</label>
               <input
                 type="date"
                 name="dob"
@@ -139,7 +142,7 @@ export default function Career() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Time of Birth</label>
+              <label>{t("form_tob")}</label>
               <input
                 type="time"
                 name="tob"
@@ -148,19 +151,19 @@ export default function Career() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Place of Birth</label>
+              <label>{t("form_pob")}</label>
               <input
                 type="text"
                 name="pob"
                 value={formData.pob}
                 onChange={handleChange}
-                placeholder="City, Country"
+                placeholder={t("form_placeholder_pob")}
               />
             </div>
           </div>
           <div className={styles.submitRow}>
             <button type="submit" className="btn-gold pulse-button">
-              Analyze Career Blueprint 💼
+              {t("btn_analyze_career")}
             </button>
           </div>
         </form>
@@ -169,19 +172,19 @@ export default function Career() {
           {loading || !report ? (
             <div className={styles.loaderArea}>
               <div className="spinner"></div>
-              <p>Consulting planetary houses for career transits...</p>
+              <p>{t("loader_career")}</p>
             </div>
           ) : (
             <div className={styles.reportContent}>
               <div className={`${styles.backRow} no-print`}>
                 <button onClick={resetForm} className={styles.backBtn}>
-                  ← Back to Calculator
+                  {t("form_reset")}
                 </button>
               </div>
 
               <div className={styles.reportHeader}>
-                <h2>Career Strength & Timeline Report</h2>
-                <p className={styles.subtitle}>Calculated for: {report.name}</p>
+                <h2>{t("career_report_title")}</h2>
+                <p className={styles.subtitle}>{t("career_report_calculated_for").replace("{name}", report.name)}</p>
               </div>
 
               {/* Gauge and General score */}
@@ -212,12 +215,12 @@ export default function Career() {
                   </svg>
                   <div className={styles.gaugeVal}>
                     <span className={styles.gaugeNum}>{score}%</span>
-                    <span className={styles.gaugeLabel}>Strength</span>
+                    <span className={styles.gaugeLabel}>{t("career_strength")}</span>
                   </div>
                 </div>
                 
                 <div className={styles.generalCard}>
-                  <h4>Professional Vitality Rating</h4>
+                  <h4>{t("career_rating_title")}</h4>
                   <p>{report.generalInsight}</p>
                 </div>
               </div>
@@ -226,10 +229,8 @@ export default function Career() {
               {!report.unlocked ? (
                 <div className={`${styles.lockCard} no-print`}>
                   <span className={styles.lockIcon}>🔒</span>
-                  <h3>Reveal Your Career & Promotion Roadmap</h3>
-                  <p>
-                    Unlock details of your upcoming Job Switch Window, corporate Promotion Recognition timing, Wealth Alignment channels, and Favorable Industrial tracks.
-                  </p>
+                  <h3>{t("lock_title_career")}</h3>
+                  <p>{t("lock_desc_career")}</p>
                   <div className={styles.pricingRow}>
                     <span className={styles.crossPrice}>₹199</span>
                     <span className={styles.activePrice}>₹19</span>
@@ -238,7 +239,7 @@ export default function Career() {
                     onClick={() => setShowCheckout(true)}
                     className="btn-gold pulse-button"
                   >
-                    Unlock Career Forecast ✦
+                    {t("lock_btn_career")}
                   </button>
                 </div>
               ) : (
@@ -250,7 +251,7 @@ export default function Career() {
                     <div className={styles.detailCard}>
                       <div className={styles.cardHeader}>
                         <span className={styles.cardIcon}>🔄</span>
-                        <h4>Upcoming Job Switch Window</h4>
+                        <h4>{t("career_switch_title")}</h4>
                       </div>
                       <p>{report.switchTiming}</p>
                     </div>
@@ -259,7 +260,7 @@ export default function Career() {
                     <div className={styles.detailCard}>
                       <div className={styles.cardHeader}>
                         <span className={styles.cardIcon}>📈</span>
-                        <h4>Corporate Promotion & Status Timing</h4>
+                        <h4>{t("career_promo_title")}</h4>
                       </div>
                       <p>{report.promotionTiming}</p>
                     </div>
@@ -268,7 +269,7 @@ export default function Career() {
                     <div className={styles.detailCard}>
                       <div className={styles.cardHeader}>
                         <span className={styles.cardIcon}>💰</span>
-                        <h4>Financial Wealth Accumulation Source</h4>
+                        <h4>{t("career_wealth_title")}</h4>
                       </div>
                       <p>{report.wealthAnalysis}</p>
                     </div>
@@ -276,7 +277,7 @@ export default function Career() {
 
                   {/* Favorable Industries */}
                   <div className={styles.sectorsSection}>
-                    <h4 className={styles.sectorsHeader}>Top Favorable Industrial Tracks</h4>
+                    <h4 className={styles.sectorsHeader}>{t("career_sectors_title")}</h4>
                     <div className={styles.badgesGrid}>
                       {report.favorableCareerDirections.map((sector, idx) => (
                         <div key={idx} className={styles.sectorBadge}>
@@ -289,7 +290,7 @@ export default function Career() {
                   {/* Print Button */}
                   <div className={`${styles.printContainer} no-print`}>
                     <button onClick={handlePrint} className="btn-gold">
-                      Print / Save as PDF 📄
+                      {t("btn_print_report")}
                     </button>
                   </div>
                 </div>
@@ -303,7 +304,7 @@ export default function Career() {
       {showCheckout && (
         <CheckoutModal
           featureId="career"
-          featureTitle="Career Prediction & Roadmap"
+          featureTitle={t("sec_career")}
           price={19}
           birthHash={getBirthHash(formData)}
           onClose={() => setShowCheckout(false)}

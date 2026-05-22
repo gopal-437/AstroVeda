@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./PalmScanner.module.css";
 import CheckoutModal from "./CheckoutModal";
 import { getBirthHash } from "@/lib/astrology-engine/helpers";
+import { useTranslation } from "@/lib/LanguageContext";
 
 export default function PalmScanner() {
   const [imageSrc, setImageSrc] = useState("");
@@ -16,6 +17,7 @@ export default function PalmScanner() {
   const [token, setToken] = useState("");
   const [showCheckout, setShowCheckout] = useState(false);
   const [activeLineTab, setActiveLineTab] = useState("all"); // 'all', 'heart', 'head', 'life'
+  const { t, language } = useTranslation();
 
   const fileInputRef = useRef(null);
 
@@ -47,7 +49,8 @@ export default function PalmScanner() {
             fileName: fileMeta.fileName,
             fileSize: fileMeta.fileSize
           },
-          token: currentToken || token
+          token: currentToken || token,
+          lang: language
         })
       });
       const data = await res.json();
@@ -94,7 +97,15 @@ export default function PalmScanner() {
     setScanning(true);
     setScanLogs([]);
     
-    const logs = [
+    const logs = language === "hi" ? [
+      "स्कैनर वेक्टर कैलिब्रेट किया जा रहा है...",
+      "हथेली की सतह के स्थलाकृति का विश्लेषण...",
+      "शुक्र पर्वत की सीमाओं का निर्धारण...",
+      "हृदय रेखा नोड्स का पता लगाया जा रहा है...",
+      "मस्तिष्क रेखा के झुकाव का मानचित्रण...",
+      "जीवन रेखा दीर्घायु चाप का आकलन...",
+      "मानचित्रण पूर्ण हुआ।"
+    ] : [
       "Calibrating scanner vectors...",
       "Analyzing palm surface topography...",
       "Locating Mount of Venus boundaries...",
@@ -171,6 +182,26 @@ export default function PalmScanner() {
     return pointsList.map(p => `${p.x}%,${p.y}%`).join(" ");
   };
 
+  const getLocalizedMountName = (name) => {
+    if (language !== "hi") return name;
+    const map = {
+      "Venus Mount": "शुक्र पर्वत (Venus Mount)",
+      "Jupiter Mount": "बृहस्पति पर्वत (Jupiter Mount)",
+      "Saturn Mount": "शनि पर्वत (Saturn Mount)"
+    };
+    return map[name] || name;
+  };
+
+  const getLocalizedAspect = (aspect) => {
+    if (language !== "hi") return aspect;
+    const map = {
+      "Vitality & Love": "जीवन शक्ति और प्रेम",
+      "Ambition & Wisdom": "महत्वाकांक्षा और ज्ञान",
+      "Discipline & Fate": "अनुशासन और भाग्य"
+    };
+    return map[aspect] || aspect;
+  };
+
   return (
     <div className={styles.container}>
       {!imageSrc ? (
@@ -182,9 +213,9 @@ export default function PalmScanner() {
           onClick={triggerFileSelect}
         >
           <span className={styles.uploadIcon}>✋</span>
-          <h3>Upload an Image of your Palm</h3>
-          <p>Drag and drop your file here, or click to browse</p>
-          <span className={styles.uploadHint}>Supports JPG, PNG (Ensure good lighting)</span>
+          <h3>{t("palm_upload_title")}</h3>
+          <p>{t("palm_upload_desc")}</p>
+          <span className={styles.uploadHint}>{t("palm_upload_hint")}</span>
           <input
             type="file"
             ref={fileInputRef}
@@ -199,10 +230,10 @@ export default function PalmScanner() {
           {!submitted && !scanning && (
             <div className={styles.actionRow}>
               <button onClick={resetScanner} className={styles.btnSecondary}>
-                ← Upload Different Image
+                {language === "hi" ? "← दूसरी छवि अपलोड करें" : "← Upload Different Image"}
               </button>
               <button onClick={handleStartScan} className="btn-gold pulse-button">
-                Map Palm Lines ✦
+                {language === "hi" ? "हस्तरेखा का नक्शा बनाएं ✦" : "Map Palm Lines ✦"}
               </button>
             </div>
           )}
@@ -264,7 +295,7 @@ export default function PalmScanner() {
             <div className={styles.panelSide}>
               {scanning && (
                 <div className={styles.consoleBox}>
-                  <h4>Reading Micro-Contours</h4>
+                  <h4>{language === "hi" ? "सूक्ष्म-आकृतियों को पढ़ना" : "Reading Micro-Contours"}</h4>
                   <div className={styles.logsList}>
                     {scanLogs.map((log, idx) => (
                       <p key={idx} className={styles.logLine}>
@@ -280,19 +311,19 @@ export default function PalmScanner() {
                   {loading || !report ? (
                     <div className={styles.spinnerArea}>
                       <div className="spinner"></div>
-                      <p>Calculating mounting indices...</p>
+                      <p>{t("loader_palm")}</p>
                     </div>
                   ) : (
                     <div className={styles.readyReport}>
                       <div className={`${styles.resetHeader} no-print`}>
                         <button onClick={resetScanner} className={styles.resetBtn}>
-                          ← Clear & Reset
+                          {language === "hi" ? "← साफ करें और रीसेट करें" : "← Clear & Reset"}
                         </button>
                       </div>
 
                       <div className={styles.resultsTitle}>
-                        <h3>Interactive Palm Mapping</h3>
-                        <p className={styles.filenameSub}>File: {fileMeta.fileName}</p>
+                        <h3>{language === "hi" ? "इंटरैक्टिव हस्तरेखा मानचित्रण" : "Interactive Palm Mapping"}</h3>
+                        <p className={styles.filenameSub}>{language === "hi" ? "फ़ाइल: " : "File: "} {fileMeta.fileName}</p>
                       </div>
 
                       {/* Line Filters Tabs */}
@@ -301,25 +332,25 @@ export default function PalmScanner() {
                           onClick={() => setActiveLineTab("all")}
                           className={`${styles.tabBtn} ${activeLineTab === "all" ? styles.tabActive : ""}`}
                         >
-                          All Lines
+                          {language === "hi" ? "सभी रेखाएं" : "All Lines"}
                         </button>
                         <button
                           onClick={() => setActiveLineTab("heart")}
                           className={`${styles.tabBtn} ${styles.heartBorder} ${activeLineTab === "heart" ? styles.heartActive : ""}`}
                         >
-                          ❤ Heart
+                          {language === "hi" ? "❤ हृदय" : "❤ Heart"}
                         </button>
                         <button
                           onClick={() => setActiveLineTab("head")}
                           className={`${styles.tabBtn} ${styles.headBorder} ${activeLineTab === "head" ? styles.headActive : ""}`}
                         >
-                          🧠 Head
+                          {language === "hi" ? "🧠 मस्तिष्क" : "🧠 Head"}
                         </button>
                         <button
                           onClick={() => setActiveLineTab("life")}
                           className={`${styles.tabBtn} ${styles.lifeBorder} ${activeLineTab === "life" ? styles.lifeActive : ""}`}
                         >
-                          ⚡ Life
+                          {language === "hi" ? "⚡ जीवन" : "⚡ Life"}
                         </button>
                       </div>
 
@@ -359,7 +390,7 @@ export default function PalmScanner() {
                             />
                           </svg>
                           <div className={styles.ringsVal}>
-                            <span className={styles.ringsLabel}>Mapped</span>
+                            <span className={styles.ringsLabel}>{language === "hi" ? "मैप किया गया" : "Mapped"}</span>
                           </div>
                         </div>
 
@@ -367,15 +398,15 @@ export default function PalmScanner() {
                         <div className={styles.scoresGrid}>
                           <div className={styles.scoreRow}>
                             <span className={`${styles.bullet} ${styles.heartBul}`}></span>
-                            <span>Heart: <strong>{report.heartScore}%</strong> ({report.heartTitle})</span>
+                            <span>{language === "hi" ? "हृदय: " : "Heart: "}<strong>{report.heartScore}%</strong> ({report.heartTitle})</span>
                           </div>
                           <div className={styles.scoreRow}>
                             <span className={`${styles.bullet} ${styles.headBul}`}></span>
-                            <span>Head: <strong>{report.headScore}%</strong> ({report.headTitle})</span>
+                            <span>{language === "hi" ? "मस्तिष्क: " : "Head: "}<strong>{report.headScore}%</strong> ({report.headTitle})</span>
                           </div>
                           <div className={styles.scoreRow}>
                             <span className={`${styles.bullet} ${styles.lifeBul}`}></span>
-                            <span>Life: <strong>{report.lifeScore}%</strong> ({report.lifeTitle})</span>
+                            <span>{language === "hi" ? "जीवन: " : "Life: "}<strong>{report.lifeScore}%</strong> ({report.lifeTitle})</span>
                           </div>
                         </div>
                       </div>
@@ -384,10 +415,8 @@ export default function PalmScanner() {
                       {!report.unlocked ? (
                         <div className={`${styles.lockCard} no-print`}>
                           <span className={styles.lockIcon}>🔒</span>
-                          <h3>Reveal Your Full Palmistry Report</h3>
-                          <p>
-                            Unlock deep textual character breakdown of all major lines, star ratings for your astrological mounts, and key life milestones mapped along your timeline.
-                          </p>
+                          <h3>{t("lock_title_palm")}</h3>
+                          <p>{t("lock_desc_palm")}</p>
                           <div className={styles.pricingRow}>
                             <span className={styles.crossPrice}>₹299</span>
                             <span className={styles.activePrice}>₹29</span>
@@ -396,7 +425,7 @@ export default function PalmScanner() {
                             onClick={() => setShowCheckout(true)}
                             className="btn-gold pulse-button"
                           >
-                            Unlock Complete Report ✦
+                            {t("lock_btn_palm")}
                           </button>
                         </div>
                       ) : (
@@ -405,33 +434,33 @@ export default function PalmScanner() {
 
                           {/* Line Interpretations */}
                           <div className={styles.premiumSection}>
-                            <h4 className={styles.sectionHeader}>Line Interpretations</h4>
+                            <h4 className={styles.sectionHeader}>{language === "hi" ? "रेखाओं की व्याख्या" : "Line Interpretations"}</h4>
                             
                             <div className={styles.detailCard}>
-                              <h5 className={styles.heartText}>❤ Heart Line Description</h5>
+                              <h5 className={styles.heartText}>{language === "hi" ? "❤ हृदय रेखा का विवरण" : "❤ Heart Line Description"}</h5>
                               <p>{report.heartDesc}</p>
                             </div>
 
                             <div className={styles.detailCard}>
-                              <h5 className={styles.headText}>🧠 Head Line Description</h5>
+                              <h5 className={styles.headText}>{language === "hi" ? "🧠 मस्तिष्क रेखा का विवरण" : "🧠 Head Line Description"}</h5>
                               <p>{report.headDesc}</p>
                             </div>
 
                             <div className={styles.detailCard}>
-                              <h5 className={styles.lifeText}>⚡ Life Line Description</h5>
+                              <h5 className={styles.lifeText}>{language === "hi" ? "⚡ जीवन रेखा का विवरण" : "⚡ Life Line Description"}</h5>
                               <p>{report.lifeDesc}</p>
                             </div>
                           </div>
 
                           {/* Astrological Mounts */}
                           <div className={styles.premiumSection}>
-                            <h4 className={styles.sectionHeader}>Active Astrological Mounts</h4>
+                            <h4 className={styles.sectionHeader}>{language === "hi" ? "सक्रिय ज्योतिषीय पर्वत" : "Active Astrological Mounts"}</h4>
                             <div className={styles.mountsGrid}>
                               {report.mounts?.map((mount, idx) => (
                                 <div key={idx} className={styles.mountCard}>
                                   <div className={styles.mountTitle}>
-                                    <h5>{mount.name}</h5>
-                                    <span className={styles.mountAspect}>{mount.aspect}</span>
+                                    <h5>{getLocalizedMountName(mount.name)}</h5>
+                                    <span className={styles.mountAspect}>{getLocalizedAspect(mount.aspect)}</span>
                                   </div>
                                   <div className={styles.starsRow}>
                                     {Array.from({ length: 5 }).map((_, sIdx) => (
@@ -451,11 +480,13 @@ export default function PalmScanner() {
 
                           {/* Age Milestones */}
                           <div className={styles.premiumSection}>
-                            <h4 className={styles.sectionHeader}>Curvature Milestones Timeline</h4>
+                            <h4 className={styles.sectionHeader}>{language === "hi" ? "रेखा-घुमाव मील के पत्थर की समयरेखा" : "Curvature Milestones Timeline"}</h4>
                             <div className={styles.timelineList}>
                               {report.milestones?.map((stone, idx) => (
                                 <div key={idx} className={styles.timelineItem}>
-                                  <div className={styles.timelineIndex}>Age {stone.age}</div>
+                                  <div className={styles.timelineIndex}>
+                                    {language === "hi" ? `आयु ${stone.age}` : `Age ${stone.age}`}
+                                  </div>
                                   <div className={styles.timelineContent}>
                                     <h6>{stone.title}</h6>
                                     <p>{stone.desc}</p>
@@ -468,7 +499,7 @@ export default function PalmScanner() {
                           {/* Print / Save PDF */}
                           <div className={`${styles.printContainer} no-print`}>
                             <button onClick={handlePrint} className="btn-gold">
-                              Print / Save as PDF 📄
+                              {t("btn_print_report")}
                             </button>
                           </div>
                         </div>
@@ -486,7 +517,7 @@ export default function PalmScanner() {
       {showCheckout && (
         <CheckoutModal
           featureId="palm"
-          featureTitle="Full Palm Reading & Mounts Chart"
+          featureTitle={t("sec_palm")}
           price={29}
           birthHash={getBirthHash({
             name: fileMeta.fileName,

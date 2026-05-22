@@ -5,7 +5,7 @@ import { getBirthHash } from "@/lib/astrology-engine/helpers";
 
 export async function POST(request) {
   try {
-    const { featureId, birthDetails, token } = await request.json();
+    const { featureId, birthDetails, token, lang } = await request.json();
 
     if (!featureId || !birthDetails) {
       return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });
@@ -37,7 +37,7 @@ export async function POST(request) {
     }
 
     // Generate the report using the hybrid astrology engine
-    const reportData = generateAstrologyReport(featureId, birthDetails, isPremium);
+    const reportData = generateAstrologyReport(featureId, birthDetails, isPremium, lang);
 
     return NextResponse.json(reportData);
   } catch (error) {

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Marriage.module.css";
 import CheckoutModal from "./CheckoutModal";
 import { getBirthHash } from "@/lib/astrology-engine/helpers";
+import { useTranslation } from "@/lib/LanguageContext";
 
 export default function Marriage() {
   const [formData, setFormData] = useState({
@@ -19,6 +20,7 @@ export default function Marriage() {
   const [report, setReport] = useState(null);
   const [token, setToken] = useState("");
   const [showCheckout, setShowCheckout] = useState(false);
+  const { t, language } = useTranslation();
 
   // Load token from localStorage if exists
   useEffect(() => {
@@ -47,7 +49,8 @@ export default function Marriage() {
         body: JSON.stringify({
           featureId: "marriage",
           birthDetails: formData,
-          token: currentToken || token
+          token: currentToken || token,
+          lang: language
         })
       });
       const data = await res.json();
@@ -62,7 +65,7 @@ export default function Marriage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.dob) {
-      alert("Please enter Name and Date of Birth.");
+      alert(language === "hi" ? "कृपया नाम और जन्म तिथि दर्ज करें।" : "Please enter Name and Date of Birth.");
       return;
     }
     setSubmitted(true);
@@ -119,18 +122,18 @@ export default function Marriage() {
         <form onSubmit={handleSubmit} className={styles.formContainer}>
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
-              <label>Full Name</label>
+              <label>{t("form_full_name")}</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter your full name"
+                placeholder={t("form_placeholder_name")}
                 required
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Date of Birth</label>
+              <label>{t("form_dob")}</label>
               <input
                 type="date"
                 name="dob"
@@ -140,7 +143,7 @@ export default function Marriage() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Time of Birth</label>
+              <label>{t("form_tob")}</label>
               <input
                 type="time"
                 name="tob"
@@ -149,32 +152,32 @@ export default function Marriage() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>Place of Birth</label>
+              <label>{t("form_pob")}</label>
               <input
                 type="text"
                 name="pob"
                 value={formData.pob}
                 onChange={handleChange}
-                placeholder="City, Country"
+                placeholder={t("form_placeholder_pob")}
               />
             </div>
             <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-              <label>Current Status</label>
+              <label>{language === "hi" ? "वर्तमान स्थिति" : "Current Status"}</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
                 className={styles.selectStyle}
               >
-                <option value="single">Single (Seeking Union)</option>
-                <option value="dating">Dating / Engaged (Predict Marriage Date)</option>
-                <option value="married">Married (Strengthen Relationship Bond)</option>
+                <option value="single">{language === "hi" ? "एकल (मिलन की तलाश में)" : "Single (Seeking Union)"}</option>
+                <option value="dating">{language === "hi" ? "रिश्ते में / सगाई (शादी की तारीख का पूर्वानुमान)" : "Dating / Engaged (Predict Marriage Date)"}</option>
+                <option value="married">{language === "hi" ? "विवाहित (रिश्ते के बंधन को मजबूत करें)" : "Married (Strengthen Relationship Bond)"}</option>
               </select>
             </div>
           </div>
           <div className={styles.submitRow}>
             <button type="submit" className="btn-gold pulse-button">
-              Analyze Marriage Chart 💍
+              {t("btn_calculate_marriage")}
             </button>
           </div>
         </form>
@@ -183,19 +186,19 @@ export default function Marriage() {
           {loading || !report ? (
             <div className={styles.loaderArea}>
               <div className="spinner"></div>
-              <p>Reading Seventh House alignment for Union transits...</p>
+              <p>{t("loader_marriage")}</p>
             </div>
           ) : (
             <div className={styles.reportContent}>
               <div className={`${styles.backRow} no-print`}>
                 <button onClick={resetForm} className={styles.backBtn}>
-                  ← Back to Calculator
+                  {t("form_reset")}
                 </button>
               </div>
 
               <div className={styles.reportHeader}>
-                <h2>Vedic Marriage Timing & Union Report</h2>
-                <p className={styles.subtitle}>Calculated for: {formData.name}</p>
+                <h2>{language === "hi" ? "वैदिक विवाह समय और मिलन रिपोर्ट" : "Vedic Marriage Timing & Union Report"}</h2>
+                <p className={styles.subtitle}>{t("career_report_calculated_for").replace("{name}", formData.name)}</p>
               </div>
 
               {/* Gauge and General score */}
@@ -226,15 +229,15 @@ export default function Marriage() {
                   </svg>
                   <div className={styles.gaugeVal}>
                     <span className={styles.gaugeNum}>{score}%</span>
-                    <span className={styles.gaugeLabel}>Union Index</span>
+                    <span className={styles.gaugeLabel}>{language === "hi" ? "मिलन सूचकांक" : "Union Index"}</span>
                   </div>
                 </div>
                 
                 <div className={styles.generalCard}>
-                  <h4>Favorable Marriage Window</h4>
+                  <h4>{language === "hi" ? "अनुकूल विवाह समय" : "Favorable Marriage Window"}</h4>
                   <div className={styles.teaserAge}>{report.generalAgeRange}</div>
                   <p className={styles.teaserHint}>
-                    Based on Jupiter transits across the 7th house and D9 Navamsha calculations.
+                    {language === "hi" ? "सप्तम भाव में बृहस्पति के गोचर और D9 नवमांश गणना पर आधारित।" : "Based on Jupiter transits across the 7th house and D9 Navamsha calculations."}
                   </p>
                 </div>
               </div>
@@ -243,10 +246,8 @@ export default function Marriage() {
               {!report.unlocked ? (
                 <div className={`${styles.lockCard} no-print`}>
                   <span className={styles.lockIcon}>🔒</span>
-                  <h3>Reveal Your Full Marriage Analysis</h3>
-                  <p>
-                    Unlock detailed Venus/Jupiter transit forecasts, meeting context (Love vs. Arranged probability), prospective spouse personality traits, and astrological obstacles & remedies.
-                  </p>
+                  <h3>{t("lock_title_marriage")}</h3>
+                  <p>{t("lock_desc_marriage")}</p>
                   <div className={styles.pricingRow}>
                     <span className={styles.crossPrice}>₹299</span>
                     <span className={styles.activePrice}>₹29</span>
@@ -255,7 +256,7 @@ export default function Marriage() {
                     onClick={() => setShowCheckout(true)}
                     className="btn-gold pulse-button"
                   >
-                    Unlock Marriage Forecast ✦
+                    {t("lock_btn_marriage")}
                   </button>
                 </div>
               ) : (
@@ -267,7 +268,7 @@ export default function Marriage() {
                     <div className={styles.detailCard}>
                       <div className={styles.cardHeader}>
                         <span className={styles.cardIcon}>🪐</span>
-                        <h4>Seventh House Transit Alignment</h4>
+                        <h4>{language === "hi" ? "सप्तम भाव गोचर संरेखण" : "Seventh House Transit Alignment"}</h4>
                       </div>
                       <p>{report.possibilityAnalysis}</p>
                     </div>
@@ -276,7 +277,7 @@ export default function Marriage() {
                     <div className={styles.detailCard}>
                       <div className={styles.cardHeader}>
                         <span className={styles.cardIcon}>💝</span>
-                        <h4>Meeting Context & Union Style</h4>
+                        <h4>{language === "hi" ? "बैठक संदर्भ और मिलन शैली" : "Meeting Context & Union Style"}</h4>
                       </div>
                       <p>{report.marriageType}</p>
                     </div>
@@ -285,7 +286,7 @@ export default function Marriage() {
                     <div className={styles.detailCard}>
                       <div className={styles.cardHeader}>
                         <span className={styles.cardIcon}>👤</span>
-                        <h4>Partner Archetype & Traits</h4>
+                        <h4>{language === "hi" ? "जीवनसाथी का प्रकार और लक्षण" : "Partner Archetype & Traits"}</h4>
                       </div>
                       <p>{report.partnerAnalysis}</p>
                     </div>
@@ -294,7 +295,7 @@ export default function Marriage() {
                     <div className={styles.detailCard}>
                       <div className={styles.cardHeader}>
                         <span className={styles.cardIcon}>🛡️</span>
-                        <h4>Obstacles & Astrological Remedies</h4>
+                        <h4>{language === "hi" ? "बाधाएं और ज्योतिषीय उपाय" : "Obstacles & Astrological Remedies"}</h4>
                       </div>
                       <p>{report.obstaclesAnalysis}</p>
                     </div>
@@ -302,7 +303,7 @@ export default function Marriage() {
 
                   {/* Favorable Periods Timeline */}
                   <div className={styles.periodsSection}>
-                    <h4 className={styles.periodsHeader}>Highly Active Marriage Transits</h4>
+                    <h4 className={styles.periodsHeader}>{language === "hi" ? "अत्यधिक सक्रिय विवाह गोचर" : "Highly Active Marriage Transits"}</h4>
                     <div className={styles.badgesGrid}>
                       {report.favorablePeriods?.map((period, idx) => (
                         <div key={idx} className={styles.periodBadge}>
@@ -315,7 +316,7 @@ export default function Marriage() {
                   {/* Print Button */}
                   <div className={`${styles.printContainer} no-print`}>
                     <button onClick={handlePrint} className="btn-gold">
-                      Print / Save as PDF 📄
+                      {t("btn_print_report")}
                     </button>
                   </div>
                 </div>
@@ -329,7 +330,7 @@ export default function Marriage() {
       {showCheckout && (
         <CheckoutModal
           featureId="marriage"
-          featureTitle="Full Marriage Prediction & Timing"
+          featureTitle={t("sec_marriage")}
           price={29}
           birthHash={getBirthHash(formData)}
           onClose={() => setShowCheckout(false)}

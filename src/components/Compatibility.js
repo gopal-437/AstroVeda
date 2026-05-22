@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Compatibility.module.css";
 import CheckoutModal from "./CheckoutModal";
 import { getBirthHash } from "@/lib/astrology-engine/helpers";
+import { useTranslation } from "@/lib/LanguageContext";
 
 export default function Compatibility() {
   // Input states
@@ -23,6 +24,7 @@ export default function Compatibility() {
   const [report, setReport] = useState(null);
   const [token, setToken] = useState("");
   const [showCheckout, setShowCheckout] = useState(false);
+  const { t, language } = useTranslation();
 
   // Load token from localStorage if exists
   useEffect(() => {
@@ -60,7 +62,8 @@ export default function Compatibility() {
         body: JSON.stringify({
           featureId: "compatibility",
           birthDetails: formData,
-          token: currentToken || token
+          token: currentToken || token,
+          lang: language
         })
       });
       const data = await res.json();
@@ -75,18 +78,36 @@ export default function Compatibility() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.dob || !formData.partnerName || !formData.partnerDob) {
-      alert("Please fill in Name and Date of Birth for both partners.");
+      alert(language === "hi" ? "कृपया सभी आवश्यक फ़ील्ड भरें।" : "Please enter all required details.");
       return;
     }
     setSubmitted(true);
-    const hash = getBirthHash(formData);
+    const hash = getBirthHash({
+      name: formData.name,
+      dob: formData.dob,
+      tob: formData.tob,
+      pob: formData.pob,
+      partnerName: formData.partnerName,
+      partnerDob: formData.partnerDob,
+      partnerTob: formData.partnerTob,
+      partnerPob: formData.partnerPob
+    });
     const savedToken = localStorage.getItem(`token_compatibility_${hash}`) || "";
     handleFetchReport(savedToken);
   };
 
   const handlePaymentSuccess = (receivedToken) => {
     setToken(receivedToken);
-    const hash = getBirthHash(formData);
+    const hash = getBirthHash({
+      name: formData.name,
+      dob: formData.dob,
+      tob: formData.tob,
+      pob: formData.pob,
+      partnerName: formData.partnerName,
+      partnerDob: formData.partnerDob,
+      partnerTob: formData.partnerTob,
+      partnerPob: formData.partnerPob
+    });
     localStorage.setItem(`token_compatibility_${hash}`, receivedToken);
     setShowCheckout(false);
     // Fetch the unlocked report immediately using the new token
@@ -134,21 +155,21 @@ export default function Compatibility() {
         <form onSubmit={handleSubmit} className={styles.formGrid}>
           {/* Partner 1 Details */}
           <div className={styles.formColumn}>
-            <h3 className={styles.columnTitle}>✦ Your Details</h3>
+            <h3 className={styles.columnTitle}>{t("form_your_details")}</h3>
             <div className={styles.inputGroup}>
-              <label>Name</label>
+              <label>{t("form_name")}</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter your name"
+                placeholder={t("form_placeholder_name")}
                 required
               />
             </div>
             <div className={styles.inputRow}>
               <div className={styles.inputGroup}>
-                <label>Date of Birth</label>
+                <label>{t("form_dob")}</label>
                 <input
                   type="date"
                   name="dob"
@@ -158,7 +179,7 @@ export default function Compatibility() {
                 />
               </div>
               <div className={styles.inputGroup}>
-                <label>Time of Birth</label>
+                <label>{t("form_tob")}</label>
                 <input
                   type="time"
                   name="tob"
@@ -168,13 +189,13 @@ export default function Compatibility() {
               </div>
             </div>
             <div className={styles.inputGroup}>
-              <label>Place of Birth</label>
+              <label>{t("form_pob")}</label>
               <input
                 type="text"
                 name="pob"
                 value={formData.pob}
                 onChange={handleChange}
-                placeholder="City, Country"
+                placeholder={t("form_placeholder_pob")}
               />
             </div>
           </div>
@@ -186,21 +207,21 @@ export default function Compatibility() {
 
           {/* Partner 2 Details */}
           <div className={styles.formColumn}>
-            <h3 className={styles.columnTitle}>✦ Partner's Details</h3>
+            <h3 className={styles.columnTitle}>{t("form_partner_details")}</h3>
             <div className={styles.inputGroup}>
-              <label>Name</label>
+              <label>{t("form_name")}</label>
               <input
                 type="text"
                 name="partnerName"
                 value={formData.partnerName}
                 onChange={handleChange}
-                placeholder="Enter partner name"
+                placeholder={t("form_placeholder_partner_name")}
                 required
               />
             </div>
             <div className={styles.inputRow}>
               <div className={styles.inputGroup}>
-                <label>Date of Birth</label>
+                <label>{t("form_dob")}</label>
                 <input
                   type="date"
                   name="partnerDob"
@@ -210,7 +231,7 @@ export default function Compatibility() {
                 />
               </div>
               <div className={styles.inputGroup}>
-                <label>Time of Birth</label>
+                <label>{t("form_tob")}</label>
                 <input
                   type="time"
                   name="partnerTob"
@@ -220,20 +241,20 @@ export default function Compatibility() {
               </div>
             </div>
             <div className={styles.inputGroup}>
-              <label>Place of Birth</label>
+              <label>{t("form_pob")}</label>
               <input
                 type="text"
                 name="partnerPob"
                 value={formData.partnerPob}
                 onChange={handleChange}
-                placeholder="City, Country"
+                placeholder={t("form_placeholder_pob")}
               />
             </div>
           </div>
 
           <div className={styles.submitRow}>
             <button type="submit" className="btn-gold pulse-button">
-              Analyze Synastry ✦
+              {t("btn_analyze_compatibility")}
             </button>
           </div>
         </form>
@@ -242,20 +263,22 @@ export default function Compatibility() {
           {loading || !report ? (
             <div className={styles.loaderArea}>
               <div className="spinner"></div>
-              <p>Calculating planetary alignments...</p>
+              <p>{t("loader_compatibility")}</p>
             </div>
           ) : (
             <div className={styles.reportContent}>
               <div className={`${styles.backRow} no-print`}>
                 <button onClick={resetForm} className={styles.backBtn}>
-                  ← Enter Different Details
+                  {t("form_reset")}
                 </button>
               </div>
 
               {/* Names header */}
               <div className={styles.namesHeader}>
                 <h2>{report.name1} & {report.name2}</h2>
-                <p className={styles.subSubtitle}>Zodiac Synastry: {report.zodiac1} + {report.zodiac2}</p>
+                <p className={styles.subSubtitle}>
+                  {language === "hi" ? "राशि सिनास्ट्री: " : "Zodiac Synastry: "}{report.zodiac1} + {report.zodiac2}
+                </p>
               </div>
 
               {/* Gauge and Sub-scores */}
@@ -283,7 +306,7 @@ export default function Compatibility() {
                       {report.compatibilityPercentage}%
                     </text>
                     <text x="80" y="98" className={styles.gaugeTextLabel} textAnchor="middle">
-                      MATCH
+                      {language === "hi" ? "मिलान" : "MATCH"}
                     </text>
                   </svg>
                 </div>
@@ -292,7 +315,7 @@ export default function Compatibility() {
                 <div className={styles.subScoresGrid}>
                   <div className={styles.barGroup}>
                     <div className={styles.barHeader}>
-                      <span>💖 Chemistry & Attraction</span>
+                      <span>{language === "hi" ? "💖 रसायन विज्ञान और आकर्षण" : "💖 Chemistry & Attraction"}</span>
                       <span>{report.scores.love}%</span>
                     </div>
                     <div className={styles.barTrack}>
@@ -302,7 +325,7 @@ export default function Compatibility() {
 
                   <div className={styles.barGroup}>
                     <div className={styles.barHeader}>
-                      <span>🔒 Trust & Values</span>
+                      <span>{language === "hi" ? "🔒 विश्वास और मूल्य" : "🔒 Trust & Values"}</span>
                       <span>{report.scores.trust}%</span>
                     </div>
                     <div className={styles.barTrack}>
@@ -312,7 +335,7 @@ export default function Compatibility() {
 
                   <div className={styles.barGroup}>
                     <div className={styles.barHeader}>
-                      <span>🗣️ Communication Harmony</span>
+                      <span>{language === "hi" ? "🗣️ संचार सामंजस्य" : "🗣️ Communication Harmony"}</span>
                       <span>{report.scores.communication}%</span>
                     </div>
                     <div className={styles.barTrack}>
@@ -322,7 +345,7 @@ export default function Compatibility() {
 
                   <div className={styles.barGroup}>
                     <div className={styles.barHeader}>
-                      <span>🔥 Passion & Intimacy</span>
+                      <span>{language === "hi" ? "🔥 जुनून और आत्मीयता" : "🔥 Passion & Intimacy"}</span>
                       <span>{report.scores.intimacy}%</span>
                     </div>
                     <div className={styles.barTrack}>
@@ -334,7 +357,7 @@ export default function Compatibility() {
 
               {/* Free Teaser Content */}
               <div className={styles.teaserBlock}>
-                <h4 className={styles.sectionHeader}>Initial Alignment Reading</h4>
+                <h4 className={styles.sectionHeader}>{language === "hi" ? "प्रारंभिक संरेखण पठन" : "Initial Alignment Reading"}</h4>
                 <p className={styles.introParagraph}>{report.intro}</p>
               </div>
 
@@ -343,10 +366,8 @@ export default function Compatibility() {
                 /* LOCK MODAL SCREEN */
                 <div className={`${styles.lockCard} no-print`}>
                   <span className={styles.lockIcon}>🔒</span>
-                  <h3>Unlock Complete 12-Page Divine Blueprint</h3>
-                  <p>
-                    Reveal the complete cosmic synastry analysis between your charts. Unlocks deep planetary guides, critical red flags, key relationship strengths, and your structured 3-phase relationship milestones.
-                  </p>
+                  <h3>{t("lock_title_compatibility")}</h3>
+                  <p>{t("lock_desc_compatibility")}</p>
                   <div className={styles.pricingRow}>
                     <span className={styles.crossPrice}>₹299</span>
                     <span className={styles.activePrice}>₹19</span>
@@ -355,7 +376,7 @@ export default function Compatibility() {
                     onClick={() => setShowCheckout(true)}
                     className="btn-gold pulse-button"
                   >
-                    Unlock Report Now ✦
+                    {t("lock_btn_compatibility")}
                   </button>
                 </div>
               ) : (
@@ -364,32 +385,32 @@ export default function Compatibility() {
                   <hr className={styles.divider} />
                   
                   <div className={styles.premiumSection}>
-                    <h3 className={styles.sectionTitle}>Detailed Energetic Breakdown</h3>
+                    <h3 className={styles.sectionTitle}>{language === "hi" ? "विस्तृत ऊर्जावान विश्लेषण" : "Detailed Energetic Breakdown"}</h3>
                     
                     <div className={styles.detailCard}>
-                      <h4>💖 Love & Chemistry</h4>
+                      <h4>{language === "hi" ? "💖 प्रेम और रसायन विज्ञान" : "💖 Love & Chemistry"}</h4>
                       <p>{report.detailedAnalysis.love}</p>
                     </div>
 
                     <div className={styles.detailCard}>
-                      <h4>🔒 Trust & Stability</h4>
+                      <h4>{language === "hi" ? "🔒 विश्वास और स्थिरता" : "🔒 Trust & Stability"}</h4>
                       <p>{report.detailedAnalysis.trust}</p>
                     </div>
 
                     <div className={styles.detailCard}>
-                      <h4>🗣️ Communication Style</h4>
+                      <h4>{language === "hi" ? "🗣️ संचार शैली" : "🗣️ Communication Style"}</h4>
                       <p>{report.detailedAnalysis.communication}</p>
                     </div>
 
                     <div className={styles.detailCard}>
-                      <h4>🔥 Passion & Intimacy</h4>
+                      <h4>{language === "hi" ? "🔥 जुनून और आत्मीयता" : "🔥 Passion & Intimacy"}</h4>
                       <p>{report.detailedAnalysis.intimacy}</p>
                     </div>
                   </div>
 
                   <div className={styles.strengthsFlagsGrid}>
                     <div className={`${styles.listCard} ${styles.strengthsCard}`}>
-                      <h4>✦ Core Alignment Strengths</h4>
+                      <h4>{language === "hi" ? "✦ मुख्य संरेखण ताकत" : "✦ Core Alignment Strengths"}</h4>
                       <ul>
                         {report.strengths.map((str, idx) => (
                           <li key={idx}>✅ {str}</li>
@@ -398,7 +419,7 @@ export default function Compatibility() {
                     </div>
 
                     <div className={`${styles.listCard} ${styles.flagsCard}`}>
-                      <h4>✦ Potential Karmic Warning Signs</h4>
+                      <h4>{language === "hi" ? "✦ संभावित कर्मिक चेतावनी संकेत" : "✦ Potential Karmic Warning Signs"}</h4>
                       <ul>
                         {report.redFlags.map((flag, idx) => (
                           <li key={idx}>⚠️ {flag}</li>
@@ -408,7 +429,7 @@ export default function Compatibility() {
                   </div>
 
                   <div className={styles.timelineSection}>
-                    <h3 className={styles.sectionTitle}>Relationship Growth Milestones</h3>
+                    <h3 className={styles.sectionTitle}>{language === "hi" ? "रिश्ते के विकास के मील के पत्थर" : "Relationship Growth Milestones"}</h3>
                     <div className={styles.timelineList}>
                       {report.relationshipTimeline.map((time, idx) => (
                         <div key={idx} className={styles.timelineItem}>
@@ -422,7 +443,7 @@ export default function Compatibility() {
                   {/* PDF download */}
                   <div className={`${styles.printContainer} no-print`}>
                     <button onClick={handlePrint} className="btn-gold">
-                      Print / Save as PDF 📄
+                      {t("btn_print_report")}
                     </button>
                   </div>
                 </div>
@@ -436,7 +457,7 @@ export default function Compatibility() {
       {showCheckout && (
         <CheckoutModal
           featureId="compatibility"
-          featureTitle="Love Compatibility Match"
+          featureTitle={t("sec_compatibility")}
           price={19}
           birthHash={getBirthHash(formData)}
           onClose={() => setShowCheckout(false)}

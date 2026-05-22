@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import styles from "./Horoscope.module.css";
+import { useTranslation } from "@/lib/LanguageContext";
 
 const ZODIACS = [
   { name: "Aries", symbol: "♈", date: "Mar 21 - Apr 19", dob: "2000-03-25" },
@@ -22,6 +23,7 @@ export default function Horoscope() {
   const [selectedSign, setSelectedSign] = useState(ZODIACS[0]);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { t, language } = useTranslation();
 
   const fetchHoroscope = async (sign) => {
     setLoading(true);
@@ -31,7 +33,8 @@ export default function Horoscope() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           featureId: "horoscope",
-          birthDetails: { dob: sign.dob }
+          birthDetails: { dob: sign.dob },
+          lang: language
         })
       });
       const json = await res.json();
@@ -45,7 +48,7 @@ export default function Horoscope() {
 
   useEffect(() => {
     fetchHoroscope(selectedSign);
-  }, [selectedSign]);
+  }, [selectedSign, language]);
 
   return (
     <div className={styles.container}>
@@ -58,7 +61,7 @@ export default function Horoscope() {
             onClick={() => setSelectedSign(zodiac)}
           >
             <span className={styles.tabSymbol}>{zodiac.symbol}</span>
-            <span className={styles.tabName}>{zodiac.name}</span>
+            <span className={styles.tabName}>{t("zodiac_" + zodiac.name.toLowerCase())}</span>
             <span className={styles.tabDate}>{zodiac.date}</span>
           </button>
         ))}
@@ -68,7 +71,7 @@ export default function Horoscope() {
       {loading || !data ? (
         <div className={styles.loaderArea}>
           <div className="spinner"></div>
-          <p>Aligning celestial bodies...</p>
+          <p>{t("aligning_celestial")}</p>
         </div>
       ) : (
         <div className={styles.reportArea}>
@@ -76,19 +79,19 @@ export default function Horoscope() {
             <div className={styles.signDisplay}>
               <span className={styles.bigSymbol}>{selectedSign.symbol}</span>
               <div>
-                <h3 className={styles.signName}>{selectedSign.name} Horoscope</h3>
-                <p className={styles.todayDate}>{new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <h3 className={styles.signName}>{t("zodiac_" + selectedSign.name.toLowerCase())} {t("horoscope_title")}</h3>
+                <p className={styles.todayDate}>{new Date().toLocaleDateString(language === "hi" ? 'hi-IN' : 'en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
               </div>
             </div>
 
             {/* Lucky elements */}
             <div className={styles.luckyGrid}>
               <div className={styles.luckyBadge}>
-                <span className={styles.luckyLabel}>LUCKY COLOR</span>
+                <span className={styles.luckyLabel}>{t("lucky_color")}</span>
                 <span className={`${styles.luckyVal} glow-gold`}>{data.luckyColor}</span>
               </div>
               <div className={styles.luckyBadge}>
-                <span className={styles.luckyLabel}>LUCKY NUMBER</span>
+                <span className={styles.luckyLabel}>{t("lucky_number")}</span>
                 <span className={`${styles.luckyVal} glow-cyan`}>{data.luckyNumber}</span>
               </div>
             </div>
@@ -97,16 +100,16 @@ export default function Horoscope() {
           <div className={styles.detailsGrid}>
             {/* Core text */}
             <div className={styles.predictionText}>
-              <h4 className={styles.sectionHeader}>Today's Prediction</h4>
+              <h4 className={styles.sectionHeader}>{t("today_prediction")}</h4>
               <p>{data.predictions.general}</p>
             </div>
 
             {/* Mood Scores */}
             <div className={styles.scoresSection}>
-              <h4 className={styles.sectionHeader}>Cosmic Energies</h4>
+              <h4 className={styles.sectionHeader}>{t("cosmic_energies")}</h4>
               <div className={styles.scoreBarGroup}>
                 <div className={styles.barHeader}>
-                  <span>Overall Mood</span>
+                  <span>{t("overall_mood")}</span>
                   <span>{data.scores.overall}%</span>
                 </div>
                 <div className={styles.barTrack}>
@@ -116,7 +119,7 @@ export default function Horoscope() {
 
               <div className={styles.scoreBarGroup}>
                 <div className={styles.barHeader}>
-                  <span>Love & Connection</span>
+                  <span>{t("love_connection")}</span>
                   <span>{data.scores.love}%</span>
                 </div>
                 <div className={styles.barTrack}>
@@ -126,7 +129,7 @@ export default function Horoscope() {
 
               <div className={styles.scoreBarGroup}>
                 <div className={styles.barHeader}>
-                  <span>Career & Ambition</span>
+                  <span>{t("career_ambition")}</span>
                   <span>{data.scores.career}%</span>
                 </div>
                 <div className={styles.barTrack}>
@@ -140,20 +143,21 @@ export default function Horoscope() {
           <div className={styles.adviceGrid}>
             <div className={`${styles.adviceCard} ${styles.loveCard}`}>
               <div className={styles.cardHeader}>
-                <span>💖</span> Love Advice
+                <span>💖</span> {t("love_advice")}
               </div>
               <p>{data.predictions.love}</p>
             </div>
 
             <div className={`${styles.adviceCard} ${styles.careerCard}`}>
               <div className={styles.cardHeader}>
-                <span>💼</span> Career Advice
+                <span>💼</span> {t("career_advice")}
               </div>
               <p>{data.predictions.career}</p>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }

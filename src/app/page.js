@@ -11,6 +11,7 @@ import PalmScanner from "@/components/PalmScanner";
 import Marriage from "@/components/Marriage";
 import Timeline from "@/components/Timeline";
 import Kundli from "@/components/Kundli";
+import { useTranslation } from "@/lib/LanguageContext";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
     career: false,
     numerology: false
   });
+  const { t } = useTranslation();
 
   const toggleSection = (id) => {
     setExpanded((prev) => ({
@@ -44,16 +46,16 @@ export default function Home() {
       {/* Hero Section */}
       <section className={`${styles.heroSection} no-print`}>
         <div className={styles.heroLeft}>
-          <span className={styles.badge}>Ancient Vedic Wisdom</span>
+          <span className={styles.badge}>{t("hero_badge")}</span>
           <h1 className={styles.heroTitle}>
-            Unveil Your Cosmic <span className={styles.glowText}>Destiny</span>
+            {t("hero_title_1")} <span className={styles.glowText}>{t("hero_title_2")}</span>
           </h1>
           <p className={styles.heroSubtitle}>
-            Unlock deep life insights with mathematical precision. Explore compatibility, timeline graphs, detailed birth charts, and numerology paths computed by authentic Vedic algorithms.
+            {t("hero_subtitle")}
           </p>
           <div className={styles.heroButtons}>
-            <a href="#horoscope" className="btn-gold pulse-button">Check Horoscope 🔮</a>
-            <a href="#palm" className="btn-outline">Palm Reading ✋</a>
+            <a href="#horoscope" className="btn-gold pulse-button">{t("hero_btn_horoscope")}</a>
+            <a href="#palm" className="btn-outline">{t("hero_btn_palm")}</a>
           </div>
         </div>
         <div className={styles.heroRight}>
@@ -79,8 +81,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>🔮</span>
             <div>
-              <h2 className={styles.sectionTitle}>Daily Horoscope</h2>
-              <p className={styles.sectionDesc}>Personalized daily astrology insights and lucky indicators</p>
+              <h2 className={styles.sectionTitle}>{t("sec_horoscope")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_horoscope")}</p>
             </div>
             <span className={styles.priceBadge}>Free</span>
             <span className={`${styles.arrowIcon} ${expanded.horoscope ? styles.arrowExpanded : ""}`}>
@@ -107,8 +109,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>✋</span>
             <div>
-              <h2 className={styles.sectionTitle}>Cosmic Palm Scan</h2>
-              <p className={styles.sectionDesc}>Detailed palm reading using uploaded hand image</p>
+              <h2 className={styles.sectionTitle}>{t("sec_palm")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_palm")}</p>
             </div>
             <span className={styles.priceBadge}>₹29</span>
             <span className={`${styles.arrowIcon} ${expanded.palm ? styles.arrowExpanded : ""}`}>
@@ -120,7 +122,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Section 3: Compatibility Match */}
+        {/* Section 3: Love Compatibility */}
         <section
           id="compatibility"
           className={`${styles.section} cosmic-card ${
@@ -135,8 +137,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>❤️</span>
             <div>
-              <h2 className={styles.sectionTitle}>Love Compatibility</h2>
-              <p className={styles.sectionDesc}>Check compatibility and chart alignments with your partner</p>
+              <h2 className={styles.sectionTitle}>{t("sec_love")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_love")}</p>
             </div>
             <span className={styles.priceBadge}>₹19</span>
             <span className={`${styles.arrowIcon} ${expanded.compatibility ? styles.arrowExpanded : ""}`}>
@@ -163,8 +165,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>💍</span>
             <div>
-              <h2 className={styles.sectionTitle}>Marriage Prediction</h2>
-              <p className={styles.sectionDesc}>Astrology-based marriage timing and relationship obstacles</p>
+              <h2 className={styles.sectionTitle}>{t("sec_marriage")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_marriage")}</p>
             </div>
             <span className={styles.priceBadge}>₹29</span>
             <span className={`${styles.arrowIcon} ${expanded.marriage ? styles.arrowExpanded : ""}`}>
@@ -191,8 +193,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>📈</span>
             <div>
-              <h2 className={styles.sectionTitle}>Future Timeline</h2>
-              <p className={styles.sectionDesc}>Visual cycle-based future roadmap and life graph</p>
+              <h2 className={styles.sectionTitle}>{t("sec_timeline")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_timeline")}</p>
             </div>
             <span className={styles.priceBadge}>₹29</span>
             <span className={`${styles.arrowIcon} ${expanded.timeline ? styles.arrowExpanded : ""}`}>
@@ -219,8 +221,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>☸️</span>
             <div>
-              <h2 className={styles.sectionTitle}>Kundli / Birth Chart</h2>
-              <p className={styles.sectionDesc}>Detailed Vedic birth chart and planetary house positions</p>
+              <h2 className={styles.sectionTitle}>{t("sec_kundli")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_kundli")}</p>
             </div>
             <span className={styles.priceBadge}>₹49</span>
             <span className={`${styles.arrowIcon} ${expanded.kundli ? styles.arrowExpanded : ""}`}>
@@ -247,8 +249,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>💼</span>
             <div>
-              <h2 className={styles.sectionTitle}>Career Prediction</h2>
-              <p className={styles.sectionDesc}>Astrology-based career strength analysis and promotion periods</p>
+              <h2 className={styles.sectionTitle}>{t("sec_career")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_career")}</p>
             </div>
             <span className={styles.priceBadge}>₹19</span>
             <span className={`${styles.arrowIcon} ${expanded.career ? styles.arrowExpanded : ""}`}>
@@ -275,8 +277,8 @@ export default function Home() {
           >
             <span className={styles.sectionIcon}>🔢</span>
             <div>
-              <h2 className={styles.sectionTitle}>Numerology Report</h2>
-              <p className={styles.sectionDesc}>Numerological calculations based on name and date of birth</p>
+              <h2 className={styles.sectionTitle}>{t("sec_numerology")}</h2>
+              <p className={styles.sectionDesc}>{t("desc_numerology")}</p>
             </div>
             <span className={styles.priceBadge}>₹19</span>
             <span className={`${styles.arrowIcon} ${expanded.numerology ? styles.arrowExpanded : ""}`}>
