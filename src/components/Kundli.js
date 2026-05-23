@@ -188,7 +188,7 @@ export default function Kundli() {
         <form onSubmit={handleSubmit} className={styles.formContainer}>
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
-              <label>{t("form_full_name")}</label>
+              <label>{t("form_full_name")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="text"
                 name="name"
@@ -199,7 +199,7 @@ export default function Kundli() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>{t("form_dob")}</label>
+              <label>{t("form_dob")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="date"
                 name="dob"
@@ -209,7 +209,7 @@ export default function Kundli() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>{t("form_tob")}</label>
+              <label>{t("form_tob")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="time"
                 name="tob"
@@ -219,7 +219,7 @@ export default function Kundli() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>{t("form_pob")}</label>
+              <label>{t("form_pob")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="text"
                 name="pob"

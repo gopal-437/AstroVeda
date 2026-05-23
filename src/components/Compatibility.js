@@ -157,7 +157,7 @@ export default function Compatibility() {
           <div className={styles.formColumn}>
             <h3 className={styles.columnTitle}>{t("form_your_details")}</h3>
             <div className={styles.inputGroup}>
-              <label>{t("form_name")}</label>
+              <label>{t("form_name")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="text"
                 name="name"
@@ -169,7 +169,7 @@ export default function Compatibility() {
             </div>
             <div className={styles.inputRow}>
               <div className={styles.inputGroup}>
-                <label>{t("form_dob")}</label>
+                <label>{t("form_dob")} <span style={{ color: "#ef4444" }}>*</span></label>
                 <input
                   type="date"
                   name="dob"
@@ -209,7 +209,7 @@ export default function Compatibility() {
           <div className={styles.formColumn}>
             <h3 className={styles.columnTitle}>{t("form_partner_details")}</h3>
             <div className={styles.inputGroup}>
-              <label>{t("form_name")}</label>
+              <label>{t("form_name")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="text"
                 name="partnerName"
@@ -221,7 +221,7 @@ export default function Compatibility() {
             </div>
             <div className={styles.inputRow}>
               <div className={styles.inputGroup}>
-                <label>{t("form_dob")}</label>
+                <label>{t("form_dob")} <span style={{ color: "#ef4444" }}>*</span></label>
                 <input
                   type="date"
                   name="partnerDob"

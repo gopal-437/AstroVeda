@@ -155,7 +155,7 @@ export default function Timeline() {
         <form onSubmit={handleSubmit} className={styles.formContainer}>
           <div className={styles.formGrid}>
             <div className={styles.inputGroup}>
-              <label>{t("form_full_name")}</label>
+              <label>{t("form_full_name")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="text"
                 name="name"
@@ -166,7 +166,7 @@ export default function Timeline() {
               />
             </div>
             <div className={styles.inputGroup}>
-              <label>{t("form_dob")}</label>
+              <label>{t("form_dob")} <span style={{ color: "#ef4444" }}>*</span></label>
               <input
                 type="date"
                 name="dob"
