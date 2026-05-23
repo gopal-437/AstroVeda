@@ -480,7 +480,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .inputRow {
     grid-template-columns: 1fr;
   }
