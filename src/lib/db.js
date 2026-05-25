@@ -5,23 +5,6 @@ const dbPath = path.join(process.cwd(), "data", "db.json");
 
 // Connection States
 const isRedis = !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
-const isMongo = !!process.env.MONGODB_URI;
-
-let mongoClient = null;
-
-// Dynamic import helper for MongoDB client (avoids compile errors if package is missing)
-async function getMongoClient() {
-  if (mongoClient) return mongoClient;
-  try {
-    const { MongoClient } = await import("mongodb");
-    mongoClient = new MongoClient(process.env.MONGODB_URI);
-    await mongoClient.connect();
-    return mongoClient;
-  } catch (error) {
-    console.error("MongoDB dynamic load/connection failed. Verify 'mongodb' is in package.json:", error);
-    throw error;
-  }
-}
 
 // Ensure data directory exists (local only)
 async function ensureDir() {
@@ -60,21 +43,6 @@ export async function readDb() {
     }
   }
 
-  // 2. MongoDB
-  if (isMongo) {
-    try {
-      const client = await getMongoClient();
-      const db = client.db("astroveda");
-      const [visits, transactions] = await Promise.all([
-        db.collection("visits").find({}).toArray(),
-        db.collection("transactions").find({}).toArray()
-      ]);
-      return { visits, transactions };
-    } catch (err) {
-      console.error("MongoDB fetch failure, defaulting to empty:", err);
-      return { visits: [], transactions: [] };
-    }
-  }
 
   // 3. Fallback Local File Storage
   await ensureDir();
@@ -134,17 +102,6 @@ export async function trackVisit({ eventType, moduleName, country, city, ip }) {
     }
   }
 
-  // 2. MongoDB
-  if (isMongo) {
-    try {
-      const client = await getMongoClient();
-      const db = client.db("astroveda");
-      await db.collection("visits").insertOne(newVisit);
-      return newVisit;
-    } catch (err) {
-      console.error("MongoDB log visit failure:", err);
-    }
-  }
 
   // 3. Fallback Local File
   try {
@@ -187,17 +144,6 @@ export async function recordTransaction({ orderId, paymentId, featureId, price }
     }
   }
 
-  // 2. MongoDB
-  if (isMongo) {
-    try {
-      const client = await getMongoClient();
-      const db = client.db("astroveda");
-      await db.collection("transactions").insertOne(newTransaction);
-      return newTransaction;
-    } catch (err) {
-      console.error("MongoDB record tx failure:", err);
-    }
-  }
 
   // 3. Fallback Local File
   try {
