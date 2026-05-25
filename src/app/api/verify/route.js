@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import { recordTransaction } from "@/lib/db";
 
 export async function POST(request) {
   try {
@@ -37,6 +38,14 @@ export async function POST(request) {
     if (!isValid) {
       return NextResponse.json({ error: "Invalid payment signature" }, { status: 400 });
     }
+
+    // Record the transaction in the database
+    await recordTransaction({
+      orderId: razorpay_order_id || `order_demo_${Math.random().toString(36).substring(2, 9)}`,
+      paymentId: razorpay_payment_id || "pay_demo_unknown",
+      featureId,
+      price: Number(price) || 0
+    });
 
     // Generate JWT token containing access rights
     const token = jwt.sign(

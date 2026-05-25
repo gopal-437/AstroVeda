@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 import Header from "@/components/Header";
 import Horoscope from "@/components/Horoscope";
 import Compatibility from "@/components/Compatibility";
@@ -28,11 +29,21 @@ export default function Home() {
   });
   const { t } = useTranslation();
 
+  useEffect(() => {
+    trackEvent("page_view");
+  }, []);
+
   const toggleSection = (id) => {
-    setExpanded((prev) => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    setExpanded((prev) => {
+      const nextState = !prev[id];
+      if (nextState) {
+        trackEvent("module_view", id);
+      }
+      return {
+        ...prev,
+        [id]: nextState
+      };
+    });
   };
 
   return (
