@@ -3,8 +3,10 @@ import path from "path";
 
 const dbPath = path.join(process.cwd(), "data", "db.json");
 
-// Connection States
-const isRedis = !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+const rawUrl = process.env.UPSTASH_REDIS_REST_URL || "";
+const redisUrl = rawUrl.replace(/\/$/, "");
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || "";
+const isRedis = !!(redisUrl && redisToken);
 
 // Ensure data directory exists (local only)
 async function ensureDir() {
@@ -20,12 +22,14 @@ export async function readDb() {
   if (isRedis) {
     try {
       const [visitsRes, txRes] = await Promise.all([
-        fetch(`${process.env.UPSTASH_REDIS_REST_URL}/lrange/visits/0/-1`, {
-          headers: { Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}` },
+        fetch(`${redisUrl}/lrange/visits/0/-1`, {
+          headers: { Authorization: `Bearer ${redisToken}` },
+          cache: "no-store",
           next: { revalidate: 0 } // Disable fetch cache
         }),
-        fetch(`${process.env.UPSTASH_REDIS_REST_URL}/lrange/transactions/0/-1`, {
-          headers: { Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}` },
+        fetch(`${redisUrl}/lrange/transactions/0/-1`, {
+          headers: { Authorization: `Bearer ${redisToken}` },
+          cache: "no-store",
           next: { revalidate: 0 } // Disable fetch cache
         })
       ]);
@@ -85,17 +89,23 @@ export async function trackVisit({ eventType, moduleName, country, city, ip }) {
   // 1. Upstash Redis
   if (isRedis) {
     try {
-      await fetch(process.env.UPSTASH_REDIS_REST_URL, {
+      const response = await fetch(`${redisUrl}/pipeline`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+          Authorization: `Bearer ${redisToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify([
           ["RPUSH", "visits", JSON.stringify(newVisit)],
           ["LTRIM", "visits", "-20000", "-1"] // cap size
-        ])
+        ]),
+        cache: "no-store",
+        next: { revalidate: 0 }
       });
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("Redis pipeline write error:", errText);
+      }
       return newVisit;
     } catch (err) {
       console.error("Redis log visit failure:", err);
@@ -130,14 +140,20 @@ export async function recordTransaction({ orderId, paymentId, featureId, price }
   // 1. Upstash Redis
   if (isRedis) {
     try {
-      await fetch(process.env.UPSTASH_REDIS_REST_URL, {
+      const response = await fetch(redisUrl, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+          Authorization: `Bearer ${redisToken}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(["RPUSH", "transactions", JSON.stringify(newTransaction)])
+        body: JSON.stringify(["RPUSH", "transactions", JSON.stringify(newTransaction)]),
+        cache: "no-store",
+        next: { revalidate: 0 }
       });
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("Redis transaction write error:", errText);
+      }
       return newTransaction;
     } catch (err) {
       console.error("Redis record tx failure:", err);
