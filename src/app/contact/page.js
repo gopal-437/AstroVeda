@@ -48,7 +48,7 @@ export default function Contact() {
       </main>
 
       <footer className={styles.footer}>
-        <p>© 2026 AstroVeda. All rights reserved. Calculations are mathematical approximations for entertainment purposes.</p>
+        <p>© 2026 AstroVeda. All rights reserved. Precision calculations based on Vedic principles.</p>
       </footer>
     </div>
   );

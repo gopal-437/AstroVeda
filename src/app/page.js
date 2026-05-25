@@ -304,7 +304,7 @@ export default function Home() {
       </main>
 
       <footer className={`${styles.footer} no-print`}>
-        <p>© 2026 AstroVeda. All rights reserved. Calculations are mathematical approximations for entertainment purposes.</p>
+        <p>© 2026 AstroVeda. All rights reserved. Precision calculations based on Vedic principles.</p>
       </footer>
     </div>
   );
