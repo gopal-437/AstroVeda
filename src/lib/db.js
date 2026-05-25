@@ -3,27 +3,90 @@ import path from "path";
 
 const dbPath = path.join(process.cwd(), "data", "db.json");
 
-// Ensure data directory exists
+// Connection States
+const isRedis = !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+const isMongo = !!process.env.MONGODB_URI;
+
+let mongoClient = null;
+
+// Dynamic import helper for MongoDB client (avoids compile errors if package is missing)
+async function getMongoClient() {
+  if (mongoClient) return mongoClient;
+  try {
+    const { MongoClient } = await import("mongodb");
+    mongoClient = new MongoClient(process.env.MONGODB_URI);
+    await mongoClient.connect();
+    return mongoClient;
+  } catch (error) {
+    console.error("MongoDB dynamic load/connection failed. Verify 'mongodb' is in package.json:", error);
+    throw error;
+  }
+}
+
+// Ensure data directory exists (local only)
 async function ensureDir() {
   await fs.mkdir(path.dirname(dbPath), { recursive: true });
 }
 
-// Read database
+// Queue for serializing local file writes (local only)
+let writeQueue = Promise.resolve();
+
+// Read raw lists from Redis, MongoDB, or local JSON file
 export async function readDb() {
+  // 1. Upstash Redis (REST API - serverless safe, no dependencies)
+  if (isRedis) {
+    try {
+      const [visitsRes, txRes] = await Promise.all([
+        fetch(`${process.env.UPSTASH_REDIS_REST_URL}/lrange/visits/0/-1`, {
+          headers: { Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}` },
+          next: { revalidate: 0 } // Disable fetch cache
+        }),
+        fetch(`${process.env.UPSTASH_REDIS_REST_URL}/lrange/transactions/0/-1`, {
+          headers: { Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}` },
+          next: { revalidate: 0 } // Disable fetch cache
+        })
+      ]);
+
+      const visitsData = await visitsRes.json();
+      const txData = await txRes.json();
+
+      const visits = (visitsData.result || []).map(v => JSON.parse(v));
+      const transactions = (txData.result || []).map(t => JSON.parse(t));
+
+      return { visits, transactions };
+    } catch (err) {
+      console.error("Redis fetch failure, defaulting to empty:", err);
+      return { visits: [], transactions: [] };
+    }
+  }
+
+  // 2. MongoDB
+  if (isMongo) {
+    try {
+      const client = await getMongoClient();
+      const db = client.db("astroveda");
+      const [visits, transactions] = await Promise.all([
+        db.collection("visits").find({}).toArray(),
+        db.collection("transactions").find({}).toArray()
+      ]);
+      return { visits, transactions };
+    } catch (err) {
+      console.error("MongoDB fetch failure, defaulting to empty:", err);
+      return { visits: [], transactions: [] };
+    }
+  }
+
+  // 3. Fallback Local File Storage
   await ensureDir();
   try {
     const data = await fs.readFile(dbPath, "utf-8");
     return JSON.parse(data);
   } catch (error) {
-    // If file doesn't exist or is invalid, return empty structure
     return { visits: [], transactions: [] };
   }
 }
 
-// Queue for serializing write operations
-let writeQueue = Promise.resolve();
-
-// Write database atomically
+// Write database atomically (local only)
 export async function writeDb(data) {
   await ensureDir();
   writeQueue = writeQueue.then(async () => {
@@ -41,51 +104,109 @@ export async function writeDb(data) {
 
 // Append a visitor log
 export async function trackVisit({ eventType, moduleName, country, city, ip }) {
+  const newVisit = {
+    id: `v_${Math.random().toString(36).substring(2, 11)}`,
+    eventType,
+    moduleName: moduleName || null,
+    country: country || "Unknown Country",
+    city: city || "Unknown City",
+    ip: ip || "Unknown IP",
+    timestamp: Date.now(),
+  };
+
+  // 1. Upstash Redis
+  if (isRedis) {
+    try {
+      await fetch(process.env.UPSTASH_REDIS_REST_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify([
+          ["RPUSH", "visits", JSON.stringify(newVisit)],
+          ["LTRIM", "visits", "-20000", "-1"] // cap size
+        ])
+      });
+      return newVisit;
+    } catch (err) {
+      console.error("Redis log visit failure:", err);
+    }
+  }
+
+  // 2. MongoDB
+  if (isMongo) {
+    try {
+      const client = await getMongoClient();
+      const db = client.db("astroveda");
+      await db.collection("visits").insertOne(newVisit);
+      return newVisit;
+    } catch (err) {
+      console.error("MongoDB log visit failure:", err);
+    }
+  }
+
+  // 3. Fallback Local File
   try {
     const db = await readDb();
-    
-    const newVisit = {
-      id: `v_${Math.random().toString(36).substring(2, 11)}`,
-      eventType, // "page_view" | "module_view"
-      moduleName: moduleName || null,
-      country: country || "Unknown Country",
-      city: city || "Unknown City",
-      ip: ip || "Unknown IP",
-      timestamp: Date.now(),
-    };
-
     db.visits.push(newVisit);
-
-    // Cap the visits array to prevent bloat (keep last 20,000 entries)
     if (db.visits.length > 20000) {
       db.visits = db.visits.slice(db.visits.length - 20000);
     }
-
     await writeDb(db);
     return newVisit;
   } catch (error) {
-    console.error("Error tracking visit:", error);
+    console.error("Local file log visit failure:", error);
   }
 }
 
 // Append a transaction log
 export async function recordTransaction({ orderId, paymentId, featureId, price }) {
+  const newTransaction = {
+    orderId,
+    paymentId,
+    featureId,
+    price: Number(price),
+    timestamp: Date.now(),
+  };
+
+  // 1. Upstash Redis
+  if (isRedis) {
+    try {
+      await fetch(process.env.UPSTASH_REDIS_REST_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(["RPUSH", "transactions", JSON.stringify(newTransaction)])
+      });
+      return newTransaction;
+    } catch (err) {
+      console.error("Redis record tx failure:", err);
+    }
+  }
+
+  // 2. MongoDB
+  if (isMongo) {
+    try {
+      const client = await getMongoClient();
+      const db = client.db("astroveda");
+      await db.collection("transactions").insertOne(newTransaction);
+      return newTransaction;
+    } catch (err) {
+      console.error("MongoDB record tx failure:", err);
+    }
+  }
+
+  // 3. Fallback Local File
   try {
     const db = await readDb();
-    
-    const newTransaction = {
-      orderId,
-      paymentId,
-      featureId,
-      price: Number(price),
-      timestamp: Date.now(),
-    };
-
     db.transactions.push(newTransaction);
     await writeDb(db);
     return newTransaction;
   } catch (error) {
-    console.error("Error recording transaction:", error);
+    console.error("Local file record tx failure:", error);
   }
 }
 
@@ -117,7 +238,7 @@ export async function getAnalyticsData() {
   // 2. Day-wise aggregation (Last 30 days)
   const dayMap = {};
   
-  // Initialize last 7 days with 0s to make sure there's data to chart even if empty
+  // Initialize last 7 days with 0s
   const now = Date.now();
   for (let i = 6; i >= 0; i--) {
     const dateStr = formatDate(now - i * 24 * 60 * 60 * 1000);
@@ -149,7 +270,7 @@ export async function getAnalyticsData() {
   // Convert to sorted array
   const dayWiseData = Object.values(dayMap)
     .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(-30); // limit to last 30 days
+    .slice(-30);
 
   // 3. Module-wise metrics
   const modulesList = ["horoscope", "palm", "compatibility", "marriage", "timeline", "kundli", "career", "numerology"];
@@ -172,7 +293,7 @@ export async function getAnalyticsData() {
 
   const moduleWiseData = Object.values(moduleMap);
 
-  // 4. Location-wise metrics (Top countries & cities)
+  // 4. Location-wise metrics
   const countryMap = {};
   const cityMap = {};
 
